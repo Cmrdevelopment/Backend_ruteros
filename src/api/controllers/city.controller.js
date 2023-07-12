@@ -1,64 +1,73 @@
 const User = require("../models/user.model");
+
 //const Ratings = require("../models/ratings.model");
+
 const Comment = require("../models/comment.model");
-const Offer = require("../models/offer.model");
+
 const { OfferErrors } = require("../../helpers/jsonResponseMsgs");
+
 const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 
-//! -----------------------------------------------------------------------
-//? -------------------------------CREATE OFFER ---------------------------------
-//! -----------------------------------------------------------------------
-const createOffer = async (req, res, next) => {
-  try {
-    // const arrayTechnology = req.body.technologies.split(",");
 
-    const offerBody = {
-      offerTitle: req.body.offerTitle,
-      offerType: req.body.offerType,
-      experienceYears: req.body.experienceYears,
-      annualSalary: req.body.annualSalary,
-      descriptionGeneral: req.body.descriptionGeneral,
-      descriptionResponsabilities: req.body.descriptionResponsabilities,
-      descriptionRequires: req.body.descriptionRequires,
-      descriptionSalary: req.body.descriptionSalary,
-      city: req.body.city,
-      jobType: req.body.jobType,
-      technologies: req.body.technologies,
-      offerState: req.body.offerState,
+const CityRoute = require("../models/cityRoutes.model");
+
+const Offer = require("../models/offer.model"); // este se debe borrar ya que los sustituye CityRoute
+
+
+
+
+//! -----------------------------------------------------------------------
+//? -------------------------------CREATE CITY ---------------------------------
+//! -----------------------------------------------------------------------
+const createCity = async (req, res, next) => {
+  try {
+
+    const cityBody = {
+
       owner: req.user._id,
+      city: req.body.city,
+      difficulty: req.body.difficulty,
+      routeName: req.body.routeName,    
+      routeDistance: req.body.routeDistance,
+      routeDuration: req.body.routeDuration,
+      descriptionGeneral: req.body.descriptionGeneral,
+      routeLocation: req.body.routeLocation,      
+      itemsToCarry: req.body.itemsToCarry,
+      routeState: req.body.routeState,
     };
 
-    const newOffer = new Offer(offerBody);
-    console.log(offerBody);
-    console.log(req.body);
+    const newCity = new CityRoute(cityBody);
     try {
       if (req.file) {
-        newOffer.image = req.file.path;
+        newCity.image = req.file.path;
       } else {
-        newOffer.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
+        newCity.image = "https://res.cloudinary.com/dxpdntpqm/image/upload/v1689155185/Imagen_general_base_city_tvs85z.png";
+
+
       }
     } catch (error) {
-      return res.status(404).json("Error creating offer");
+      return res.status(404).json("Error creating city");
     }
-
+   
     try {
       // aqui guardamos en la base de datos
-      const savedOffer = await newOffer.save();
-      if (savedOffer) {
-        // ahora lo que tenemos que guardar el id en el array de offer de quien lo creo
+      const savedCity = await newCity.save();
+      if (savedCity) {
+        // ahora lo que tenemos que guardar el id en el array de city de quien lo creo
         try {
           await User.findByIdAndUpdate(req.user._id, {
-            $push: { offersCreated: newOffer._id },
+            $push: { citysCreated: newCity._id },
           });
-          return res.status(200).json(savedOffer);
+          return res.status(200).json(savedCity);
         } catch (error) {
-          return res.status(404).json("error updating user offer");
+          return res.status(404).json("error updating user city");
         }
       } else {
-        return res.status(404).json("Error creating offer");
+        return res.status(404).json("Error creating city");
       }
     } catch (error) {
-      return res.status(404).json("error saving offer");
+
+      return res.status(404).json("error saving city");
     }
   } catch (error) {
     next(error);
@@ -67,42 +76,43 @@ const createOffer = async (req, res, next) => {
 };
 
 // Añadir oferta al usiario logueado, si está interesado en la oferta
-// Add offer to user, if he/she is interested in this offer
-// When the user clickes the button "Like offer/follow offer" (or something like this)
-const addInterestedOfferToUser = async (req, res, next) => {
+// Agregar ciudad al usuario, si está interesado en esta ciudad
+// Cuando el usuario hace clic en el botón "Me gusta oferta/seguir city" (o algo así)
+const addInterestedCityToUser = async (req, res, next) => {
   try {
-    const offerBody = {
-      offerTitle: req.body.offerTitle,
-      offerType: req.body.offerType,
-      experienceYears: req.body.experienceYears,
-      annualSalary: req.body.annualSalary,
-      description: req.body.description,
+    const cityBody = {
+      owner: req.user._id,
       city: req.body.city,
-      jobType: req.body.jobType,
-      technologies: req.body.technologies,
-      offerState: req.body.offerState,
+      difficulty: req.body.difficulty,
+      routeName: req.body.routeName,
+      routeDistance: req.body.routeDistance,
+      routeDuration: req.body.routeDuration,
+      descriptionGeneral: req.body.descriptionGeneral,
+      routeLocation: req.body.routeLocation,      
+      itemsToCarry: req.body.itemsToCarry,
+      routeState: req.body.routeState,
     };
 
-    const newOffer = new Offer(offerBody);
+    const newCity = new City(cityBody);
 
     try {
       // aqui guardamos en la base de datos
-      const savedOffer = await newOffer.save();
-      if (savedOffer) {
-        // ahora lo que tenemos que guardar el id en el array de offer de quien lo creo
+      const savedCity = await newCity.save();
+      if (savedCity) {
+        // ahora lo que tenemos que guardar el id en el array de city de quien lo creo
         try {
           await User.findByIdAndUpdate(req.user._id, {
-            $push: { offersInterested: newOffer._id },
+            $push: { citysInterested: newCity._id },
           });
-          return res.status(200).json(savedOffer);
+          return res.status(200).json(savedCity);
         } catch (error) {
-          return res.status(404).json("error updating user offer");
+          return res.status(404).json("error updating user city");
         }
       } else {
-        return res.status(404).json("Error creating offer");
+        return res.status(404).json("Error creating city");
       }
     } catch (error) {
-      return res.status(404).json("error saving offer");
+      return res.status(404).json("error saving city");
     }
   } catch (error) {
     next(error);
@@ -111,45 +121,45 @@ const addInterestedOfferToUser = async (req, res, next) => {
 };
 
 //! ---------------------------------------------------------------------
-//? ------------ Toggle Interested Offer To User ------------------------
+//? ------------ Toggle Interested City To User ------------------------
 //! ---------------------------------------------------------------------
-const toggleInterestedOfferToUser = async (req, res, next) => {
+const toggleInterestedCityToUser = async (req, res, next) => {
   try {
-    const offerId = req.params.id;
+    const cityId = req.params.id;
     const userId = req.user._id;
 
-    const offer = await Offer.findById(offerId);
+    const city = await CityRoute.findById(cityId);
     const user = await User.findById(userId);
 
-    if (!offer || !user) {
-      return res.status(404).json("User or offer not found");
+    if (!city || !user) {
+      return res.status(404).json("User or city not found");
     }
 
-    const offerInUserOffersInterestedArray = await User.findOne({
+    const cityInUserCitysInterestedArray = await User.findOne({
       _id: userId,
-      offersInterested: offerId,
+      citysInterested: cityId,
     });
 
-    if (!offerInUserOffersInterestedArray) {
+    if (!cityInUserCitysInterestedArray) {
       await User.findByIdAndUpdate(userId, {
-        $push: { offersInterested: offerId },
+        $push: { citysInterested: cityId },
       });
-      await Offer.findByIdAndUpdate(offerId, {
+      await CityRoute.findByIdAndUpdate(cityId, {
         $push: { interestedUsers: userId },
       });
       return res
         .status(200)
-        .json("Offer added to user's offersInterested array");
+        .json("City added to user's citysInterested array");
     } else {
       await User.findByIdAndUpdate(userId, {
-        $pull: { offersInterested: offerId },
+        $pull: { citysInterested: cityId },
       });
-      await Offer.findByIdAndUpdate(offerId, {
+      await CityRoute.findByIdAndUpdate(cityId, {
         $pull: { interestedUsers: userId },
       });
       return res
         .status(200)
-        .json("Offer removed from user's offersInterested array");
+        .json("City removed from user's citysInterested array");
     }
   } catch (error) {
     next(error);
@@ -339,15 +349,15 @@ const deleteOffer = async (req, res, next) => {
 
         try {
           await User.updateMany(
-            { offersCreated: id },
+            { citysCreated: id },
             {
-              $pull: { offersCreated: id },
+              $pull: { citysCreated: id },
             }
           );
 
           try {
             await User.updateMany(
-              { offersCreated: id },
+              { citysCreated: id },
               {
                 $pull: { offersInterested: id },
               }
@@ -375,7 +385,7 @@ const deleteOffer = async (req, res, next) => {
               .json("failed updating user offersInterested");
           }
         } catch (error) {
-          return res.status(404).json("failed updating user offersCreated");
+          return res.status(404).json("failed updating user citysCreated");
         }
       }
     } else {
@@ -387,9 +397,12 @@ const deleteOffer = async (req, res, next) => {
 };
 
 module.exports = {
-  createOffer,
-  addInterestedOfferToUser,
-  toggleInterestedOfferToUser,
+  createCity,
+  addInterestedCityToUser,
+  toggleInterestedCityToUser,
+
+
+ 
   getOfferFollowingStatus,
   getAll,
   getById,

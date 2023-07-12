@@ -28,11 +28,22 @@ app.use(express.urlencoded({ limit: "15mb", extended: false }));
 
 //! -----ROUTES-----------
 const UserRoutes = require("./src/api/routes/user.routes");
-const ExperienceRoutes = require("./src/api/routes/experience.routes");
+
+const CityRoutes = require("./src/api/routes/city.routes");
 const ratingRoutes = require("./src/api/routes/rating.routes");
-const offerRoutes = require("./src/api/routes/offer.routes");
 const CommentRoutes = require("./src/api/routes/comment.routes");
 const ChatRoutes = require("./src/api/routes/chat.routes");
+
+
+
+const ExperienceRoutes = require("./src/api/routes/experience.routes");
+const offerRoutes = require("./src/api/routes/offer.routes");
+
+
+
+
+app.use("/api/v1/city", CityRoutes);
+
 
 app.use("/api/v1/chat", ChatRoutes);
 app.use("/api/v1/comment", CommentRoutes);
