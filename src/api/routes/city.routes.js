@@ -28,15 +28,12 @@ const CityRoutes = express.Router();
 
 
 CityRoutes.post("/createCity", [isAuth], upload.single("image"), createCity);
-
-
 CityRoutes.post(
   "/addInterestedCityToUser",
   [isAuth],
   upload.single("image"),
   addInterestedCityToUser
 );
-
 CityRoutes.post(
   "/toggleInterestedCityToUser/:id",
   [isAuth],

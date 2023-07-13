@@ -168,9 +168,9 @@ const toggleInterestedCityToUser = async (req, res, next) => {
 };
 
 //! -----------------------------------------------------------------------------
-//? --------------- GET OFFER FOLLOWING STATUS -------------------------
+//? --------------- GET CITY FOLLOWING STATUS -------------------------
 //! -----------------------------------------------------------------------------
-const getOfferFollowingStatus = async (req, res, next) => {
+const getCityFollowingStatus = async (req, res, next) => {
   try {
     // ID de la oferta a seguir por parte del usuario logueado.
     const { id } = req.params;
@@ -178,7 +178,7 @@ const getOfferFollowingStatus = async (req, res, next) => {
     // ID del usuario logueado.
     const { _id } = req.user._id;
 
-    const offerId = id;
+    const cityId = id;
     const logerUserId = _id;
 
     const logedUser = await User.findById(logerUserId);
@@ -187,23 +187,23 @@ const getOfferFollowingStatus = async (req, res, next) => {
       return res.status(404).json({ error: "Loged user not found" });
     }
 
-    const offerToFollow = await Offer.findById(offerId);
+    const cityToFollow = await Offer.findById(cityId);
 
-    if (!offerToFollow) {
+    if (!cityToFollow) {
       return res
         .status(404)
-        .json({ error: "Offer to follow by loged user not found" });
+        .json({ error: "City to follow by loged user not found" });
     }
 
-    const isOfferInOffersInterestedArr = logedUser.offersInterested.find(
-      (user) => user._id.toString() === offerId
+    const isCityInCitysInterestedArr = logedUser.citysInterested.find(
+      (user) => user._id.toString() === cityId
     );
 
-    if (isOfferInOffersInterestedArr === undefined) {
+    if (isCityInCitysInterestedArr === undefined) {
       // La oferta a seguir no está en el array 'offersInterested',
       // reportamos que la oferta no está en el array.
       return res.status(200).json({
-        status: "Offer is Not in user's offersInterested arr",
+        status: "City is Not in user's citysInterested arr",
       });
     } else {
       // La oferta a seguir está en el array 'offersInterested',
@@ -211,7 +211,7 @@ const getOfferFollowingStatus = async (req, res, next) => {
       // oferta en la que está ineresado el user está
       // en el array offersInterested.
       return res.status(200).json({
-        status: "Offer is in user's offersInterested arr",
+        status: "City is in user's citysInterested arr",
       });
     }
   } catch (error) {
@@ -220,12 +220,12 @@ const getOfferFollowingStatus = async (req, res, next) => {
 };
 
 //! ---------------------------------------------------------------------
-//? ------------------------------GET ALL OFFERS --------------------------
+//? ------------------------------GET ALL CITYS --------------------------
 //! ---------------------------------------------------------------------
 
 const getAll = async (req, res, next) => {
   try {
-    const Offers = await Offer.find()
+    const Citys = await Offer.find()
       .populate("owner")
       .populate("comments")
       .populate("ratings")
@@ -400,10 +400,11 @@ module.exports = {
   createCity,
   addInterestedCityToUser,
   toggleInterestedCityToUser,
+  getCityFollowingStatus,
 
 
  
-  getOfferFollowingStatus,
+
   getAll,
   getById,
   getByOfferName,
