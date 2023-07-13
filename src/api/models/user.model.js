@@ -55,7 +55,18 @@ const UserSchema = new mongoose.Schema(
         type: String,
       },
     ],
-
+    mountainRoutesInterested: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "MountainRoute",
+      required: false,
+      default: [],
+    },
+    mountainRoutesCreated: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "MountainRoute",
+      required: false,
+      default: [],
+    },
     offersCreated: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Offer",

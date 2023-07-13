@@ -34,6 +34,7 @@ const ratingRoutes = require("./src/api/routes/rating.routes");
 const CommentRoutes = require("./src/api/routes/comment.routes");
 const ChatRoutes = require("./src/api/routes/chat.routes");
 
+const MountainRouteRoutes = require("./src/api/routes/mountainRoutes.routes");
 
 
 const ExperienceRoutes = require("./src/api/routes/experience.routes");
@@ -41,7 +42,7 @@ const offerRoutes = require("./src/api/routes/offer.routes");
 
 
 
-
+app.use("/api/v1/mountainRoute", MountainRouteRoutes);
 app.use("/api/v1/city", CityRoutes);
 app.use("/api/v1/chat", ChatRoutes);
 app.use("/api/v1/comment", CommentRoutes);

@@ -52,9 +52,9 @@ const MountainRouteSchema = new mongoose.Schema(
 
     // imagen de la ruta
     image: {
-      type: [String],
+      type: String,
       required: false,
-      default: []
+      
     },
 
     comments: {
