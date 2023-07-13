@@ -187,7 +187,7 @@ const getCityFollowingStatus = async (req, res, next) => {
       return res.status(404).json({ error: "Loged user not found" });
     }
 
-    const cityToFollow = await Offer.findById(cityId);
+    const cityToFollow = await CityRoute.findById(cityId);
 
     if (!cityToFollow) {
       return res
@@ -225,14 +225,14 @@ const getCityFollowingStatus = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
   try {
-    const Citys = await Offer.find()
+    const Citys = await CityRoute.find()
       .populate("owner")
       .populate("comments")
       .populate("ratings")
       .populate("interestedUsers");
 
-    if (Offers) {
-      return res.status(200).json(Offers);
+    if (Citys) {
+      return res.status(200).json(Citys);
     } else {
       return res.status(404).json(OfferErrors.FAIL_SEARCHING_OFFER);
     }
@@ -247,13 +247,13 @@ const getAll = async (req, res, next) => {
 const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const offerById = await Offer.findById(id)
+    const cityById = await CityRoute.findById(id)
       .populate("owner")
       .populate("comments")
       .populate("ratings")
       .populate("interestedUsers");
-    if (offerById) {
-      return res.status(200).json(offerById);
+    if (cityById) {
+      return res.status(200).json(cityById);
     } else {
       return res.status(404).json(OfferErrors.FAIL_SEARCHING_OFFER_BY_ID);
     }
@@ -263,17 +263,17 @@ const getById = async (req, res, next) => {
 };
 
 //! ---------------------------------------------------------------------
-//? ----------------------------- GET BY OFFERNAME ------------------------
+//? ----------------------------- GET BY CITYNAME ------------------------
 //! ---------------------------------------------------------------------
 //Pregunta para quien lo revise: ¿Tiene que haber aquí también un .populate?
-const getByOfferName = async (req, res, next) => {
+const getByCityName = async (req, res, next) => {
   try {
-    const { offerName } = req.params;
+    const { cityName } = req.params;
 
-    const OfferNameByName = await Offer.find({ offerName });
+    const CityNameByName = await CityRoute.find({ cityName });
 
-    if (OfferNameByName) {
-      return res.status(200).json(OfferNameByName);
+    if (CityNameByName) {
+      return res.status(200).json(CityNameByName);
     } else {
       return res.status(404).json(OfferErrors.FAIL_SEARCHING_OFFER_BY_NAME);
     }
@@ -286,36 +286,38 @@ const getByOfferName = async (req, res, next) => {
 //? ----------------------------- UPDATE --------------------------------
 //! ---------------------------------------------------------------------
 //Revisar filterbody. Pregunta a quien revise esto: ¿Se puede meter por filterbody un valor cuyo required sea 'true'? ¿O dará problemas? En caso de problemas, revisar esto.
-const updateOffer = async (req, res, next) => {
+const updateCity = async (req, res, next) => {
   try {
     let newImage;
 
     if (req.file) {
       newImage = req.file.path;
     } else {
-      newImage = "https://pic.onlinewebfonts.com/svg/img_181369.png";
+      newImage = "https://res.cloudinary.com/dxpdntpqm/image/upload/v1689155185/Imagen_general_base_city_tvs85z.png";
     }
 
     const filterBody = {
-      offerType: req.body.offerType,
-      annualSalary: req.body.annualSalary,
-      description: req.body.description,
+     
       city: req.body.city,
-      jobType: req.body.jobType,
-      technologies: req.body.technologies,
-      experienceYears: req.body.experienceYears,
+      difficulty: req.body.difficulty,
+      routeName: req.body.routeName,    
+      routeDistance: req.body.routeDistance,
+      routeDuration: req.body.routeDuration,
+      descriptionGeneral: req.body.descriptionGeneral,
+      routeLocation: req.body.routeLocation,      
+      itemsToCarry: req.body.itemsToCarry,
       image: newImage,
-      offerState: req.body.offerState,
+      routeState: req.body.routeState,
     };
 
     const { id } = req.params;
 
-    const offerById = await Offer.findById(id);
-    if (offerById) {
-      const patchOffer = new Offer(filterBody);
-      patchOffer._id = id;
-      await Offer.findByIdAndUpdate(id, patchOffer); // Guardar los cambios en la base de datos
-      return res.status(200).json(await Offer.findById(id)); // Responder con el objeto actualizado
+    const cityById = await CityRoute.findById(id);
+    if (cityById) {
+      const patchCity = new CityRoute(filterBody);
+      patchCity._id = id;
+      await CityRoute.findByIdAndUpdate(id, patchCity); // Guardar los cambios en la base de datos
+      return res.status(200).json(await CityRoute.findById(id)); // Responder con el objeto actualizado
     } else {
       return res.status(404).json(OfferErrors.FAIL_UPDATING_OFFER);
     }
@@ -325,23 +327,23 @@ const updateOffer = async (req, res, next) => {
 };
 
 //! -----------------------------------------------------------------------
-//? -------------------------------DELETE OFFER ---------------------------------
+//? -------------------------------DELETE CITY ---------------------------------
 //! -----------------------------------------------------------------------
-const deleteOffer = async (req, res, next) => {
-  console.log("deleteOffer: =>", deleteOffer);
+const deleteCity = async (req, res, next) => {
+  console.log("deleteCity: =>", deleteCity);
 
   try {
     const { id } = req.params;
-    const deletedOffer = await Offer.findByIdAndDelete(id);
-    console.log("deletedOffer: =>", deletedOffer);
-    if (deletedOffer) {
-      if (await Offer.findById(id)) {
+    const deleteCity = await CityRoute.findByIdAndDelete(id);
+  
+    if (deleteCity) {
+      if (await CityRoute.findById(id)) {
         return res.status(404).json("failed deleting");
       } else {
-        if (deletedOffer.image) {
+        if (deleteCity.image) {
           console.log("image Existe");
 
-          deleteImgCloudinary(deletedOffer.image);
+          deleteImgCloudinary(deleteCity.image);
         } else {
           console.log("image NO existe");
         }
@@ -359,37 +361,37 @@ const deleteOffer = async (req, res, next) => {
             await User.updateMany(
               { citysCreated: id },
               {
-                $pull: { offersInterested: id },
+                $pull: { citysInterested: id },
               }
             );
 
             try {
               // lo que queremos es borrar todos los comentarios de esta oferta priva
-              await Comment.deleteMany({ offerPrivates: id });
+              await Comment.deleteMany({ cityPrivates: id });
 
               /// por ultimo lanzamos un test en el runtime para ver si se ha borrado la review correctamente
               return res.status(200).json({
-                deletedObject: deletedOffer,
-                test: (await Offer.findById(id))
-                  ? "fail deleting offer"
-                  : "success deleting offer",
+                deletedObject: deleteCity,
+                test: (await CityRoute.findById(id))
+                  ? "fail deleting city"
+                  : "success deleting xity",
               });
             } catch (error) {
               return res
                 .status(404)
-                .json("failed updating user offersInterested");
+                .json("failed updating user citysInterested");
             }
           } catch (error) {
             return res
               .status(404)
-              .json("failed updating user offersInterested");
+              .json("failed updating user citysInterested");
           }
         } catch (error) {
           return res.status(404).json("failed updating user citysCreated");
         }
       }
     } else {
-      return res.status(404).json({ message: "Fail deleting offer" });
+      return res.status(404).json({ message: "Fail deleting city" });
     }
   } catch (error) {
     return next(error);
@@ -401,13 +403,9 @@ module.exports = {
   addInterestedCityToUser,
   toggleInterestedCityToUser,
   getCityFollowingStatus,
-
-
- 
-
   getAll,
   getById,
-  getByOfferName,
-  updateOffer,
-  deleteOffer,
+  getByCityName,
+  updateCity,
+  deleteCity,
 };

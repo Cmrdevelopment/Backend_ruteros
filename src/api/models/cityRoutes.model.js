@@ -57,9 +57,7 @@ const CityRouteSchema = new mongoose.Schema(
 
     // imagen de la ruta
     image: {
-      type: [String],
-      required: false,
-      default: []
+      type: String,
     },
 
     comments: {

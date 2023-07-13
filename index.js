@@ -43,12 +43,12 @@ const offerRoutes = require("./src/api/routes/offer.routes");
 
 
 app.use("/api/v1/city", CityRoutes);
-
-
 app.use("/api/v1/chat", ChatRoutes);
 app.use("/api/v1/comment", CommentRoutes);
 app.use("/api/v1/rating", ratingRoutes);
+
 app.use("/api/v1/offers", offerRoutes);
+
 app.use("/api/v1/users", UserRoutes);
 app.use("/api/v1/experience", ExperienceRoutes);
 

@@ -6,43 +6,27 @@ const {
   toggleInterestedCityToUser,
 
   
-  getOfferFollowingStatus,
-  updateOffer,
+  getCityFollowingStatus,
   getAll,
   getById,
-  deleteOffer,
+  getByCityName,
+  updateCity,
+  deleteCity,
+
 } = require("../controllers/city.controller");
 
 const express = require("express");
 const CityRoutes = express.Router();
 
-// OfferRoutes.get("/", getAll);
-// OfferRoutes.get("/:id", getById);
-
-// OfferRoutes.patch(
-//   "/updateOffer/:id",
-//   [isAuth],
-//   upload.single("image"),
-//   updateOffer
-// );
-
-
+CityRoutes.get("/", getAll);
+CityRoutes.get("/:id", getById);
+CityRoutes.patch(  "/updateCity/:id",  [isAuth],  upload.single("image"),  updateCity);
 CityRoutes.post("/createCity", [isAuth], upload.single("image"), createCity);
-CityRoutes.post(
-  "/addInterestedCityToUser",
-  [isAuth],
-  upload.single("image"),
-  addInterestedCityToUser
-);
-CityRoutes.post(
-  "/toggleInterestedCityToUser/:id",
-  [isAuth],
-  toggleInterestedCityToUser
-);
+CityRoutes.post(  "/addInterestedCityToUser",  [isAuth],  upload.single("image"),  addInterestedCityToUser);
+CityRoutes.post(  "/toggleInterestedCityToUser/:id",  [isAuth],  toggleInterestedCityToUser);
+CityRoutes.delete("/deleteCity/:id", deleteCity);
+CityRoutes.get("/cityFollowingStatus/:id", [isAuth], getCityFollowingStatus);
 
-
-// OfferRoutes.get("/offerFollowingStatus/:id", [isAuth], getOfferFollowingStatus);
-// OfferRoutes.delete("/deleteOffer/:id", deleteOffer);
 
 
 module.exports = CityRoutes;
