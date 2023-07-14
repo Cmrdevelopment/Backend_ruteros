@@ -60,6 +60,13 @@ const CityRouteSchema = new mongoose.Schema(
       type: String,
     },
 
+    citiesCreated: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "CityRoute",
+      required: false,
+      default: [],
+    },
+
     comments: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Comment",

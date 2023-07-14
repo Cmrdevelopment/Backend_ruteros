@@ -8,12 +8,7 @@ const { OfferErrors } = require("../../helpers/jsonResponseMsgs");
 
 const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 
-
 const CityRoute = require("../models/cityRoutes.model");
-
-const Offer = require("../models/offer.model"); // este se debe borrar ya que los sustituye CityRoute
-
-
 
 
 //! -----------------------------------------------------------------------
