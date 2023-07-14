@@ -24,13 +24,16 @@ OfferRoutes.patch(
   upload.single("image"),
   updateOffer
 );
-OfferRoutes.post("/createOffer", [isAuth], upload.single("image"), createOffer);
-OfferRoutes.post(
-  "/addInterestedOfferToUser",
-  [isAuth],
-  upload.single("image"),
-  addInterestedOfferToUser
-);
+//OfferRoutes.post("/createOffer", [isAuth], upload.single("image"), createOffer);
+//OfferRoutes.post("/createOffer", [isAuth], upload.single("image"), upload.array('images', 20), createOffer);
+OfferRoutes.post("/createOffer", [isAuth], upload.array("images[]", 20), createOffer);
+
+// OfferRoutes.post(
+//   "/addInterestedOfferToUser",
+//   [isAuth],
+//   upload.single("image"),
+//   addInterestedOfferToUser
+// );
 OfferRoutes.post(
   "/toggleInterestedOfferToUser/:id",
   [isAuth],

@@ -86,6 +86,12 @@ const OfferSchema = new mongoose.Schema(
       type: String,
     },
 
+    images: {
+      type: [String],
+      required: true,
+      default: [],
+    },
+
     comments: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Comment",

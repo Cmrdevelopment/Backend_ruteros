@@ -29,11 +29,24 @@ const createOffer = async (req, res, next) => {
     };
 
     const newOffer = new Offer(offerBody);
-    console.log(offerBody);
-    console.log(req.body);
+
+    console.log(req.files)
+    // try {
+    //   if (req.file) {
+    //     newOffer.image = req.file.path;
+    //   } else {
+    //     newOffer.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
+    //   }
+    // } catch (error) {
+    //   return res.status(404).json("Error creating offer");
+    // }
+
     try {
-      if (req.file) {
-        newOffer.image = req.file.path;
+      if (req.files) {
+        newOffer.image = req.files[0].path;
+        const fileUrls = req.files.map(file => file.path);
+
+        newOffer.images = fileUrls;
       } else {
         newOffer.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
       }
