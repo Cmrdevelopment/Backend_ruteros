@@ -51,7 +51,7 @@ const createCity = async (req, res, next) => {
         // ahora lo que tenemos que guardar el id en el array de city de quien lo creo
         try {
           await User.findByIdAndUpdate(req.user._id, {
-            $push: { citysCreated: newCity._id },
+            $push: { citiesCreated: newCity._id },
           });
           return res.status(200).json(savedCity);
         } catch (error) {
@@ -346,15 +346,15 @@ const deleteCity = async (req, res, next) => {
 
         try {
           await User.updateMany(
-            { citysCreated: id },
+            { citiesCreated: id },
             {
-              $pull: { citysCreated: id },
+              $pull: { citiesCreated: id },
             }
           );
 
           try {
             await User.updateMany(
-              { citysCreated: id },
+              { citiesCreated: id },
               {
                 $pull: { citysInterested: id },
               }
@@ -382,7 +382,7 @@ const deleteCity = async (req, res, next) => {
               .json("failed updating user citysInterested");
           }
         } catch (error) {
-          return res.status(404).json("failed updating user citysCreated");
+          return res.status(404).json("failed updating user citiesCreated");
         }
       }
     } else {
