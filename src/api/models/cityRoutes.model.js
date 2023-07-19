@@ -53,11 +53,17 @@ const CityRouteSchema = new mongoose.Schema(
       default: [],
     },
 
-
-
+    
     // imagen de la ruta
     image: {
       type: String,
+    },
+
+    // imagen del Carrusel
+    images: {
+      type: [String],
+      required: true,
+      default: [],
     },
 
     citiesCreated: {

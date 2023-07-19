@@ -43,7 +43,19 @@ const createCity = async (req, res, next) => {
     } catch (error) {
       return res.status(404).json("Error creating city");
     }
-   
+    // try {
+    //   if (req.files) {
+    //     newCity.image = req.files[0].path;
+    //     const fileUrls = req.files.map(file => file.path);
+
+    //     newCity.images = fileUrls;
+    //   } else {
+    //     newCity.image = "https://res.cloudinary.com/dxpdntpqm/image/upload/v1689155185/Imagen_general_base_city_tvs85z.png";
+    //   }
+    // } catch (error) {
+    //   return res.status(404).json("Error creating offer");
+    // }
+
     try {
       // aqui guardamos en la base de datos
       const savedCity = await newCity.save();
