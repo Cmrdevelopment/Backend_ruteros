@@ -9,7 +9,7 @@ const MountainRouteSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Tipo de la oferta
+    // anteriormente offerType
     difficulty: {
       type: String,
       enum: ["Easy", "Medium", "Hard"],
@@ -57,6 +57,12 @@ const MountainRouteSchema = new mongoose.Schema(
       
     },
 
+    images: {
+      type: [String],
+      required: true,
+      default: [],
+    },
+    
     comments: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Comment",
@@ -78,7 +84,7 @@ const MountainRouteSchema = new mongoose.Schema(
       default: [],
     },
 
-    // Estado de la ruta
+    // OfferState
     routeState: {
       type: String,
       enum: ["Close", "Abandoned", "Open"],

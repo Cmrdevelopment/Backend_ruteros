@@ -12,28 +12,61 @@ const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 const createMountainRoute = async (req, res, next) => {
   try {
     const mountainRouteBody = {
+      owner: req.user._id,
       routeName: req.body.routeName,
       difficulty: req.body.difficulty,
       routeDuration: req.body.routeDuration,
+      routeDistance: req.body.routeDistance,
       descriptionGeneral: req.body.descriptionGeneral,
       routeLocation: req.body.routeLocation,
       itemsToCarry: req.body.itemsToCarry,
       routeState: req.body.routeState,
-      owner: req.user._id,
+      
+      
     };
 
     const newRoute = new MountainRoute(mountainRouteBody);
-    console.log(mountainRouteBody);
-    console.log(req.body);
+    
+      
+  // try {
+  //     if (req.file) {
+  //       newRoute.image = req.file.path;
+  //     } else {
+  //       newRoute.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
+  //     }
+  //   } catch (error) {
+  //     return res.status(404).json("Error creating route");
+  //   }
+
+
     try {
-      if (req.file) {
-        newRoute.image = req.file.path;
+      if (req.files) {
+        newRoute.image = req.files[0].path;
+        const fileUrls = req.files.map(file => file.path);
+
+        newRoute.images = fileUrls;
       } else {
-        newRoute.image = "https://pic.onlinewebfonts.com/svg/img_447092.png";
+        newRoute.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
       }
     } catch (error) {
-      return res.status(404).json("Error creating route");
+      return res.status(404).json("Error creating mountain route");
     }
+
+
+
+
+    // try {
+    //   if (req.files) {
+    //     newRoute.image = req.files[0].path;
+    //     const fileUrls = req.files.map(file => file.path);
+
+    //     newRoute.images = fileUrls;
+    //   } else {
+    //     newRoute.image = "https://pic.onlinewebfonts.com/svg/img_447092.png";
+    //   }
+    // } catch (error) {
+    //   return res.status(404).json("Error creating route");
+    // }
 
     try {
       // aqui guardamos en la base de datos
@@ -247,6 +280,8 @@ const updateMountainRoute = async (req, res, next) => {
       itemsToCarry: req.body.itemsToCarry,
       routeState: req.body.routeState,
       owner: req.user._id,
+      image: req.body.image,
+      images: req.body.image,
     };
 
     const { id } = req.params;
