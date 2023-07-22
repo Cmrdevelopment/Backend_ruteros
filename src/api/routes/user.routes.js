@@ -8,7 +8,6 @@ const {
   sendPassword,
   changePassword,
   update,
-  updateTechnologies,
   updateHabilities,
   deleteUser,
   getAll,
@@ -32,19 +31,15 @@ const UserRoutes = express.Router();
 UserRoutes.get("/", getAll);
 UserRoutes.get("/:id", getById);
 UserRoutes.get("/getUserByToken/getUserByToken", [isAuth], getByToken);
-//UserRoutes.get("/register", upload.single("image"), registerWithRedirect);
 UserRoutes.post("/register", upload.single("image"), registerSlow);
 UserRoutes.patch("/forgotpassword/forgotpassword/", changeForgottenPassword);
 UserRoutes.post("/login", login);
 UserRoutes.patch("/changepassword", [isAuth], changePassword);
 UserRoutes.patch("/update/update", [isAuth], upload.single("image"), update);
-UserRoutes.patch("/updateTechnology", [isAuth], updateTechnologies);
 UserRoutes.patch("/updateHabilities", [isAuth], updateHabilities);
 UserRoutes.patch("/banned", [isAuth], banned);
 UserRoutes.patch("/following/:id", [isAuth], following);
 UserRoutes.get("/followingStatus/:id", [isAuth], getFollowingStatus);
-// UserRoutes.patch('/updateRatingsByMe', [isAuth], updateRatingsByMe);
-// UserRoutes.patch('/updateRatingsByOthers', [isAuth], updateRatingsByOthers);
 UserRoutes.delete("/", [isAuth], deleteUser);
 UserRoutes.post("/check", checkNewUser);
 UserRoutes.post("/changeEmail", [isAuth], changeEmail);

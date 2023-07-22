@@ -20,8 +20,8 @@ const ExperienceSchema = new mongoose.Schema(
       required: true,
     },
 
-    //Tecnologías con las que se trabajó en la experiencia laboral
-    technologies: {
+    // Habilidades requeridas o aprendidas en esta experiencia
+    habilities: {
       type: [String],
       required: true,
       default: [],
@@ -41,7 +41,7 @@ const ExperienceSchema = new mongoose.Schema(
 
   {
     timestamps: true,
-  }
+  },
 );
 
 // we create the data schema model for mongoose

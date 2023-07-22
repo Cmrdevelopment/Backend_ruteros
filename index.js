@@ -19,7 +19,7 @@ app.use(
   cors({
     origin: "*",
     credentials: true,
-  })
+  }),
 );
 
 //! limitaciones en la recepcion y envio de datos en 5mb
@@ -36,11 +36,8 @@ const ChatRoutes = require("./src/api/routes/chat.routes");
 
 const MountainRouteRoutes = require("./src/api/routes/mountainRoutes.routes");
 
-
 const ExperienceRoutes = require("./src/api/routes/experience.routes");
 const offerRoutes = require("./src/api/routes/offer.routes");
-
-
 
 app.use("/api/v1/mountainRoute", MountainRouteRoutes);
 app.use("/api/v1/city", CityRoutes);

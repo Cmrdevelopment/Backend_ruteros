@@ -33,7 +33,7 @@ const RatingsSchema = new mongoose.Schema(
 
   {
     timestamps: true,
-  }
+  },
 );
 
 // we create the data schema model for mongoose

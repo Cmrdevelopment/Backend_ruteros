@@ -12,11 +12,11 @@ const createExperience = async (req, res) => {
       owner: req.user._id,
       workedWith: req.body.workedWith,
       duration: req.body.duration,
-      technologies: req.body.technologies,
+      habilities: req.body.habilities,
       description: req.body.description,
       image: cathImg,
     };
-    console.log(experienceBody);
+
     const newExperience = new Experience(experienceBody);
     try {
       const savedExperience = await newExperience.save();
@@ -112,7 +112,6 @@ const deleteExperience = async (req, res, next) => {
 
       await User.findByIdAndUpdate(idUser, {
         $pull: { experience: id },
-        //$pull: { technologies: id },
       });
 
       await Experience.findByIdAndDelete(id);

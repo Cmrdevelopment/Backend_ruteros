@@ -21,7 +21,8 @@ const CityRouteSchema = new mongoose.Schema(
       enum: ["Easy", "Medium", "Hard"],
       required: true,
     },
-    routeName: {  // Nombre de la ruta antes offerTitle
+    routeName: {
+      // Nombre de la ruta antes offerTitle
       type: String,
       required: true,
     },
@@ -45,7 +46,6 @@ const CityRouteSchema = new mongoose.Schema(
       required: true,
     },
 
-
     // Cosas que se recomiendan llevar en la ruta
     itemsToCarry: {
       type: [String],
@@ -53,7 +53,6 @@ const CityRouteSchema = new mongoose.Schema(
       default: [],
     },
 
-    
     // imagen de la ruta
     image: {
       type: String,
@@ -104,10 +103,9 @@ const CityRouteSchema = new mongoose.Schema(
 
   {
     timestamps: true,
-  }
+  },
 );
 
 // we create the data schema model for mongoose
 const CityRoute = mongoose.model("CityRoute", CityRouteSchema);
 module.exports = CityRoute;
-

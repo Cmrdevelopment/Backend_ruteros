@@ -98,7 +98,7 @@ const newComment = async (req, res, next) => {
                 });
                 try {
                   const userReal = await Offer.findById(
-                    req.body.referenceOfferComment
+                    req.body.referenceOfferComment,
                   ).populate("owner");
                   await User.findByIdAndUpdate(userReal.owner[0]._id, {
                     $push: { commentsByOthers: newComment._id },
@@ -150,7 +150,7 @@ const newComment = async (req, res, next) => {
                               userOneUpdate: await User.findById(userOne),
                               userTwoUpdate: await User.findById(userTwo),
                               newComment: await Comment.findById(
-                                savedComment._id
+                                savedComment._id,
                               ),
                             });
                           } catch (error) {
@@ -169,13 +169,13 @@ const newComment = async (req, res, next) => {
                     try {
                       await Chat.findByIdAndUpdate(
                         chatExistOne ? chatExistOne._id : chatExistTwo._id,
-                        { $push: { menssages: newComment.id } }
+                        { $push: { menssages: newComment.id } },
                       );
                       return res.status(200).json({
                         ChatExist: true,
                         newComment: await Comment.findById(savedComment._id),
                         chatUpdate: await Chat.findById(
-                          chatExistOne ? chatExistOne._id : chatExistTwo._id
+                          chatExistOne ? chatExistOne._id : chatExistTwo._id,
                         ),
                       });
                     } catch (error) {
@@ -230,7 +230,7 @@ const newComment = async (req, res, next) => {
                                   userOneUpdate: await User.findById(userOne),
                                   userTwoUpdate: await User.findById(userTwo),
                                   newComment: await Comment.findById(
-                                    savedComment._id
+                                    savedComment._id,
                                   ),
                                 });
                               } catch (error) {
@@ -252,15 +252,17 @@ const newComment = async (req, res, next) => {
                           console.log("entro por push");
                           await Chat.findByIdAndUpdate(
                             chatExistOne ? chatExistOne._id : chatExistTwo._id,
-                            { $push: { menssages: newComment.id } }
+                            { $push: { menssages: newComment.id } },
                           );
                           return res.status(200).json({
                             ChatExist: true,
                             newComment: await Comment.findById(
-                              savedComment._id
+                              savedComment._id,
                             ),
                             chatUpdate: await Chat.findById(
-                              chatExistOne ? chatExistOne._id : chatExistTwo._id
+                              chatExistOne
+                                ? chatExistOne._id
+                                : chatExistTwo._id,
                             ),
                           });
                         } catch (error) {

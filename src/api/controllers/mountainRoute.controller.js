@@ -21,28 +21,24 @@ const createMountainRoute = async (req, res, next) => {
       routeLocation: req.body.routeLocation,
       itemsToCarry: req.body.itemsToCarry,
       routeState: req.body.routeState,
-      
-      
     };
 
     const newRoute = new MountainRoute(mountainRouteBody);
-    
-      
-  // try {
-  //     if (req.file) {
-  //       newRoute.image = req.file.path;
-  //     } else {
-  //       newRoute.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
-  //     }
-  //   } catch (error) {
-  //     return res.status(404).json("Error creating route");
-  //   }
 
+    // try {
+    //     if (req.file) {
+    //       newRoute.image = req.file.path;
+    //     } else {
+    //       newRoute.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
+    //     }
+    //   } catch (error) {
+    //     return res.status(404).json("Error creating route");
+    //   }
 
     try {
       if (req.files) {
         newRoute.image = req.files[0].path;
-        const fileUrls = req.files.map(file => file.path);
+        const fileUrls = req.files.map((file) => file.path);
 
         newRoute.images = fileUrls;
       } else {
@@ -51,9 +47,6 @@ const createMountainRoute = async (req, res, next) => {
     } catch (error) {
       return res.status(404).json("Error creating mountain route");
     }
-
-
-
 
     // try {
     //   if (req.files) {
@@ -92,8 +85,6 @@ const createMountainRoute = async (req, res, next) => {
     return res.status(500).json(error.message);
   }
 };
-
-
 
 //! ---------------------------------------------------------------------
 //? ------------ Toggle Interested Mountain Route To User ---------------
@@ -134,7 +125,9 @@ const toggleInterestedMountainRouteToUser = async (req, res, next) => {
       });
       return res
         .status(200)
-        .json("Mountain route removed from user's mountainRouteInterested array");
+        .json(
+          "Mountain route removed from user's mountainRouteInterested array",
+        );
     }
   } catch (error) {
     next(error);
@@ -170,9 +163,10 @@ const getMountainRouteFollowingStatus = async (req, res, next) => {
         .json({ error: "Route to follow by loged user not found" });
     }
 
-    const isRouteInRoutesInterestedArr = logedUser.mountainRoutesInterested.find(
-      (user) => user._id.toString() === routeId,
-    );
+    const isRouteInRoutesInterestedArr =
+      logedUser.mountainRoutesInterested.find(
+        (user) => user._id.toString() === routeId,
+      );
 
     if (isRouteInRoutesInterestedArr === undefined) {
       // La oferta a seguir no está en el array 'offersInterested',
@@ -201,10 +195,10 @@ const getMountainRouteFollowingStatus = async (req, res, next) => {
 const getAllMountainRoutes = async (req, res, next) => {
   try {
     const MountainRoutes = await MountainRoute.find()
-    .populate("owner")
-    .populate("comments")
-    .populate("ratings")
-    .populate("interestedUsers");
+      .populate("owner")
+      .populate("comments")
+      .populate("ratings")
+      .populate("interestedUsers");
 
     if (MountainRoutes) {
       return res.status(200).json(MountainRoutes);
@@ -223,10 +217,10 @@ const getMountainRouteById = async (req, res, next) => {
   try {
     const { id } = req.params;
     const routeById = await MountainRoute.findById(id)
-    .populate("owner")
-    .populate("comments")
-    .populate("ratings")
-    .populate("interestedUsers");
+      .populate("owner")
+      .populate("comments")
+      .populate("ratings")
+      .populate("interestedUsers");
     if (routeById) {
       return res.status(200).json(routeById);
     } else {
@@ -309,7 +303,7 @@ const deleteMountainRoute = async (req, res, next) => {
   try {
     const { id } = req.params;
     const deletedRoute = await MountainRoute.findByIdAndDelete(id);
-    
+
     if (deletedRoute) {
       if (await MountainRoute.findById(id)) {
         return res.status(404).json("failed deleting");
@@ -361,7 +355,9 @@ const deleteMountainRoute = async (req, res, next) => {
               .json("failed updating user mountainRoutesInterested");
           }
         } catch (error) {
-          return res.status(404).json("failed updating user mountainRoutesCreated");
+          return res
+            .status(404)
+            .json("failed updating user mountainRoutesCreated");
         }
       }
     } else {

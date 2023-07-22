@@ -87,7 +87,7 @@ const registerSlow = async (req, res, next) => {
 
     const userExist = await User.findOne(
       { email: userEmail },
-      { name: userName }
+      { name: userName },
     );
 
     if (!userExist) {
@@ -293,7 +293,7 @@ const changeForgottenPassword = async (req, res, next) => {
     if (userDb) {
       return res.redirect(
         307,
-        `${BASE_URL_COMPLETE}/api/v1/users/sendPassword/${userDb._id}`
+        `${BASE_URL_COMPLETE}/api/v1/users/sendPassword/${userDb._id}`,
       );
     } else {
       return res.status(404).json("User no register");
@@ -435,7 +435,7 @@ const update = async (req, res, next) => {
     patchUser.check = req.user.check;
     patchUser.confirmationCode = req.user.confirmationCode;
     patchUser.emailChange = req.user.emailChange;
-    patchUser.technologies = req.user.technologies;
+    patchUser.habilities = req.user.habilities;
     patchUser.offersCreated = req.user.offersCreated;
     patchUser.offersInterested = req.user.offersInterested;
     patchUser.commentsByMe = req.user.commentsByMe;
@@ -491,32 +491,6 @@ const update = async (req, res, next) => {
   }
 };
 
-//! -----------------------------------------------------------------------------
-//? --------------------------- UPDATE TECHNOLOGY -------------------------------
-//! -----------------------------------------------------------------------------
-const updateTechnologies = async (req, res, next) => {
-  await User.syncIndexes();
-  try {
-    const { _id } = req.user;
-    const customBody = {
-      technologies: req.body.technologies,
-    };
-
-    const oldUser = await User.findByIdAndUpdate(_id, customBody);
-    if (oldUser) {
-      return res.status(200).json({
-        oldUser: oldUser,
-        newUser: await User.findById(_id),
-        status: "Succesfully technology updated!",
-      });
-    } else {
-      return res.status(404).json(UserErrors.FAIL_UPDATING_TECHNOLOGIES);
-    }
-  } catch (error) {
-    return next(error);
-  }
-};
-
 const updateHabilities = async (req, res, next) => {
   await User.syncIndexes();
   try {
@@ -562,28 +536,28 @@ const deleteUser = async (req, res, next) => {
         { users: _id },
         {
           $pull: { users: _id },
-        }
+        },
       );
 
       await Offer.updateMany(
         { users: _id },
         {
           $pull: { users: _id },
-        }
+        },
       );
 
       await Experience.updateMany(
         { users: _id },
         {
           $pull: { users: _id },
-        }
+        },
       );
 
       await Comment.updateMany(
         { users: _id },
         {
           $pull: { users: _id },
-        }
+        },
       );
 
       return res.status(200).json(UserSuccess.SUCCESS_DELETING_USER);
@@ -600,7 +574,7 @@ const deleteUser = async (req, res, next) => {
 const getAll = async (req, res, next) => {
   try {
     const allUsers = await User.find().populate(
-      "technologies offersCreated offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike"
+      "habilities offersCreated offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
     );
     if (allUsers) {
       return res.status(200).json(allUsers);
@@ -621,7 +595,7 @@ const getById = async (req, res, next) => {
 
     const userById = await User.findById(id)
       .populate(
-        "technologies offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike"
+        "habilities offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
       )
       .populate({ path: "offersCreated", populate: { path: "comments" } })
       .populate({
@@ -660,7 +634,7 @@ const getById = async (req, res, next) => {
 const getByToken = async (req, res, next) => {
   try {
     const userByToken = await User.findById(req.user._id).populate(
-      "technologies offersCreated offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike"
+      "habilities offersCreated offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
     );
     if (userByToken) {
       return res.status(200).json(userByToken);
@@ -736,7 +710,7 @@ const changeEmail = async (req, res, next) => {
       });
 
       return res.redirect(
-        `${BASE_URL_COMPLETE}/api/v1/users/sendNewCode/${req.user._id}`
+        `${BASE_URL_COMPLETE}/api/v1/users/sendNewCode/${req.user._id}`,
       );
     } else {
       return res.status(404).json("Debe meter un email distinto al anterior");
@@ -867,7 +841,7 @@ const verifyNewEmail = async (req, res, next) => {
         return res
           .status(400)
           .json(
-            "El correo electrónico nuevo debe ser diferente al correo electrónico actual"
+            "El correo electrónico nuevo debe ser diferente al correo electrónico actual",
           );
       }
     }
@@ -1003,7 +977,7 @@ const following = async (req, res, next) => {
     ///---------------------------------------------
 
     const isUserInFollowingArr = logedUser.following.find(
-      (user) => user._id.toString() === id
+      (user) => user._id.toString() === id,
     );
 
     if (isUserInFollowingArr === undefined) {
@@ -1012,7 +986,7 @@ const following = async (req, res, next) => {
     } else {
       // El usuario a seguir está en el array 'following', por lo tanto lo eliminamos del array.
       logedUser.following = logedUser.following.filter(
-        (user) => user._id.toString() !== id
+        (user) => user._id.toString() !== id,
       );
     }
 
@@ -1021,7 +995,7 @@ const following = async (req, res, next) => {
     //-----------------------------------------------------------------
 
     const isUserInFollowersArr = userToFollow.followers.find(
-      (user) => user._id.toString() === _id.toString()
+      (user) => user._id.toString() === _id.toString(),
     );
 
     if (isUserInFollowersArr === undefined) {
@@ -1032,7 +1006,7 @@ const following = async (req, res, next) => {
 
       // El usuario a seguir está en el array 'followers', por lo tanto lo eliminamos del array.
       userToFollow.followers = userToFollow.followers.filter(
-        (user) => user._id.toString() !== _id.toString()
+        (user) => user._id.toString() !== _id.toString(),
       );
     }
 
@@ -1074,7 +1048,7 @@ const getFollowingStatus = async (req, res, next) => {
     }
 
     const isUserInFollowingArr = logedUser.following.find(
-      (user) => user._id.toString() === id
+      (user) => user._id.toString() === id,
     );
 
     if (isUserInFollowingArr === undefined) {
@@ -1133,16 +1107,13 @@ const updateUserRol = async (req, res, next) => {
 };
 
 module.exports = {
-  //register,
   registerSlow,
   sendCode,
-  //registerWithRedirect,
   login,
   changeForgottenPassword,
   sendPassword,
   changePassword,
   update,
-  updateTechnologies,
   updateHabilities,
   deleteUser,
   getAll,

@@ -97,7 +97,7 @@ const deleteComment = async (req, res, next) => {
         { commentsByMe: id },
         {
           $pull: { commentsByMe: id },
-        }
+        },
       );
 
       try {
@@ -105,7 +105,7 @@ const deleteComment = async (req, res, next) => {
           { comentsThatILike: id },
           {
             $pull: { comentsThatILike: id },
-          }
+          },
         );
 
         return res.status(200).json({
@@ -173,7 +173,7 @@ const toggleFavorite = async (req, res, next) => {
   } catch (error) {
     return next(
       "Error while adding/removing comment to/from favourites",
-      error
+      error,
     );
   }
 };

@@ -50,12 +50,6 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
 
-    technologies: {
-      type: [String],
-      required: true,
-      default: [],
-    },
-
     // Habilities for Routers (Ruteros), like camping, orienting, ...
     habilities: {
       type: [String],
@@ -69,12 +63,14 @@ const UserSchema = new mongoose.Schema(
       required: false,
       default: [],
     },
+
     mountainRoutesCreated: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "MountainRoute",
       required: false,
       default: [],
     },
+
     offersCreated: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Offer",
@@ -155,15 +151,17 @@ const UserSchema = new mongoose.Schema(
       required: true,
       default: [],
     },
+
     chats: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Chat",
       default: [],
     },
   },
+
   {
     timestamps: true, // timestamp
-  }
+  },
 );
 
 UserSchema.pre("save", async function (next) {

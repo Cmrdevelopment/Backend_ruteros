@@ -30,7 +30,7 @@ const createOffer = async (req, res, next) => {
 
     const newOffer = new Offer(offerBody);
 
-    console.log(req.files)
+    console.log(req.files);
     // try {
     //   if (req.file) {
     //     newOffer.image = req.file.path;
@@ -44,7 +44,7 @@ const createOffer = async (req, res, next) => {
     try {
       if (req.files) {
         newOffer.image = req.files[0].path;
-        const fileUrls = req.files.map(file => file.path);
+        const fileUrls = req.files.map((file) => file.path);
 
         newOffer.images = fileUrls;
       } else {
@@ -199,7 +199,7 @@ const getOfferFollowingStatus = async (req, res, next) => {
     }
 
     const isOfferInOffersInterestedArr = logedUser.offersInterested.find(
-      (user) => user._id.toString() === offerId
+      (user) => user._id.toString() === offerId,
     );
 
     if (isOfferInOffersInterestedArr === undefined) {
@@ -355,7 +355,7 @@ const deleteOffer = async (req, res, next) => {
             { offersCreated: id },
             {
               $pull: { offersCreated: id },
-            }
+            },
           );
 
           try {
@@ -363,7 +363,7 @@ const deleteOffer = async (req, res, next) => {
               { offersCreated: id },
               {
                 $pull: { offersInterested: id },
-              }
+              },
             );
 
             try {

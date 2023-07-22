@@ -15,7 +15,8 @@ const MountainRouteSchema = new mongoose.Schema(
       enum: ["Easy", "Medium", "Hard"],
       required: true,
     },
-    routeName: {  //Anteriormente offerTitle
+    routeName: {
+      //Anteriormente offerTitle
       type: String,
       required: true,
     },
@@ -33,13 +34,11 @@ const MountainRouteSchema = new mongoose.Schema(
       required: true,
     },
 
-
     // Ciudad del trabajo
     routeLocation: {
       type: String,
       required: true,
     },
-
 
     //Cosas que se recomiendan llevar en la ruta
     itemsToCarry: {
@@ -48,13 +47,10 @@ const MountainRouteSchema = new mongoose.Schema(
       default: [],
     },
 
-
-
     // imagen de la ruta
     image: {
       type: String,
       required: false,
-      
     },
 
     images: {
@@ -62,7 +58,7 @@ const MountainRouteSchema = new mongoose.Schema(
       required: true,
       default: [],
     },
-    
+
     comments: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Comment",
@@ -94,7 +90,7 @@ const MountainRouteSchema = new mongoose.Schema(
 
   {
     timestamps: true,
-  }
+  },
 );
 
 // we create the data schema model for mongoose

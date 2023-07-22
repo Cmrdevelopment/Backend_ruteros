@@ -15,7 +15,7 @@ ExperienceRoutes.post(
   "/create",
   [isAuth],
   upload.single("image"),
-  createExperience
+  createExperience,
 );
 ExperienceRoutes.get("/", getAllExperiences);
 ExperienceRoutes.get("/:id", getByIdExperience);

@@ -2,7 +2,6 @@ const { isAuth } = require("../../middleware/auth.middleware");
 const { upload } = require("../../middleware/files.middleware");
 const {
   createOffer,
-  addInterestedOfferToUser,
   toggleInterestedOfferToUser,
   getOfferFollowingStatus,
   updateOffer,
@@ -22,11 +21,16 @@ OfferRoutes.patch(
   "/updateOffer/:id",
   [isAuth],
   upload.single("image"),
-  updateOffer
+  updateOffer,
 );
 //OfferRoutes.post("/createOffer", [isAuth], upload.single("image"), createOffer);
 //OfferRoutes.post("/createOffer", [isAuth], upload.single("image"), upload.array('images', 20), createOffer);
-OfferRoutes.post("/createOffer", [isAuth], upload.array("images[]", 20), createOffer);
+OfferRoutes.post(
+  "/createOffer",
+  [isAuth],
+  upload.array("images[]", 20),
+  createOffer,
+);
 
 // OfferRoutes.post(
 //   "/addInterestedOfferToUser",
@@ -37,7 +41,7 @@ OfferRoutes.post("/createOffer", [isAuth], upload.array("images[]", 20), createO
 OfferRoutes.post(
   "/toggleInterestedOfferToUser/:id",
   [isAuth],
-  toggleInterestedOfferToUser
+  toggleInterestedOfferToUser,
 );
 OfferRoutes.get("/offerFollowingStatus/:id", [isAuth], getOfferFollowingStatus);
 OfferRoutes.delete("/deleteOffer/:id", deleteOffer);

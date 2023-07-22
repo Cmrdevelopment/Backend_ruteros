@@ -107,7 +107,7 @@ const deleteRating = async (req, res, next) => {
                 ratingsByMe: id,
                 ratingsByOthers: id,
               },
-            }
+            },
           );
 
           try {
@@ -115,7 +115,7 @@ const deleteRating = async (req, res, next) => {
               { ratings: id },
               {
                 $pull: { ratings: id },
-              }
+              },
             );
 
             /// por ultimo lanzamos un test en el runtime para ver si se ha borrado la review correctamente
@@ -180,7 +180,7 @@ const getByReference = async (req, res, next) => {
     let ratings;
     if (refType === "Offer") {
       ratings = await Ratings.find({ referenceOffer: id }).populate(
-        "owner referenceOffer"
+        "owner referenceOffer",
       );
       return res.status(200).json(ratings);
     } else if (refType === "User") {

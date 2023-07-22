@@ -1,7 +1,5 @@
 const User = require("../models/user.model");
 
-//const Ratings = require("../models/ratings.model");
-
 const Comment = require("../models/comment.model");
 
 const { OfferErrors } = require("../../helpers/jsonResponseMsgs");
@@ -10,47 +8,35 @@ const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 
 const CityRoute = require("../models/cityRoutes.model");
 
-
 //! -----------------------------------------------------------------------
 //? -------------------------------CREATE CITY ---------------------------------
 //! -----------------------------------------------------------------------
 const createCity = async (req, res, next) => {
   try {
-
     const cityBody = {
-
       owner: req.user._id,
       city: req.body.city,
       difficulty: req.body.difficulty,
-      routeName: req.body.routeName,    
+      routeName: req.body.routeName,
       routeDistance: req.body.routeDistance,
       routeDuration: req.body.routeDuration,
       descriptionGeneral: req.body.descriptionGeneral,
-      routeLocation: req.body.routeLocation,      
+      routeLocation: req.body.routeLocation,
       itemsToCarry: req.body.itemsToCarry,
       routeState: req.body.routeState,
     };
 
     const newCity = new CityRoute(cityBody);
-    // try {
-    //   if (req.file) {
-    //     newCity.image = req.file.path;
-    //   } else {
-    //     newCity.image = "https://res.cloudinary.com/dxpdntpqm/image/upload/v1689155185/Imagen_general_base_city_tvs85z.png";
 
-
-    //   }
-    // } catch (error) {
-    //   return res.status(404).json("Error creating city");
-    // }
     try {
       if (req.files) {
         newCity.image = req.files[0].path;
-        const fileUrls = req.files.map(file => file.path);
+        const fileUrls = req.files.map((file) => file.path);
 
         newCity.images = fileUrls;
       } else {
-        newCity.image = "https://res.cloudinary.com/dxpdntpqm/image/upload/v1689155185/Imagen_general_base_city_tvs85z.png";
+        newCity.image =
+          "https://res.cloudinary.com/dxpdntpqm/image/upload/v1689155185/Imagen_general_base_city_tvs85z.png";
       }
     } catch (error) {
       return res.status(404).json("Error creating offer");
@@ -64,52 +50,6 @@ const createCity = async (req, res, next) => {
         try {
           await User.findByIdAndUpdate(req.user._id, {
             $push: { citiesCreated: newCity._id },
-          });
-          return res.status(200).json(savedCity);
-        } catch (error) {
-          return res.status(404).json("error updating user city");
-        }
-      } else {
-        return res.status(404).json("Error creating city");
-      }
-    } catch (error) {
-
-      return res.status(404).json("error saving city");
-    }
-  } catch (error) {
-    next(error);
-    return res.status(500).json(error.message);
-  }
-};
-
-// Añadir oferta al usiario logueado, si está interesado en la oferta
-// Agregar ciudad al usuario, si está interesado en esta ciudad
-// Cuando el usuario hace clic en el botón "Me gusta oferta/seguir city" (o algo así)
-const addInterestedCityToUser = async (req, res, next) => {
-  try {
-    const cityBody = {
-      owner: req.user._id,
-      city: req.body.city,
-      difficulty: req.body.difficulty,
-      routeName: req.body.routeName,
-      routeDistance: req.body.routeDistance,
-      routeDuration: req.body.routeDuration,
-      descriptionGeneral: req.body.descriptionGeneral,
-      routeLocation: req.body.routeLocation,      
-      itemsToCarry: req.body.itemsToCarry,
-      routeState: req.body.routeState,
-    };
-
-    const newCity = new City(cityBody);
-
-    try {
-      // aqui guardamos en la base de datos
-      const savedCity = await newCity.save();
-      if (savedCity) {
-        // ahora lo que tenemos que guardar el id en el array de city de quien lo creo
-        try {
-          await User.findByIdAndUpdate(req.user._id, {
-            $push: { citysInterested: newCity._id },
           });
           return res.status(200).json(savedCity);
         } catch (error) {
@@ -154,9 +94,7 @@ const toggleInterestedCityToUser = async (req, res, next) => {
       await CityRoute.findByIdAndUpdate(cityId, {
         $push: { interestedUsers: userId },
       });
-      return res
-        .status(200)
-        .json("City added to user's citysInterested array");
+      return res.status(200).json("City added to user's citysInterested array");
     } else {
       await User.findByIdAndUpdate(userId, {
         $pull: { citysInterested: cityId },
@@ -203,7 +141,7 @@ const getCityFollowingStatus = async (req, res, next) => {
     }
 
     const isCityInCitysInterestedArr = logedUser.citysInterested.find(
-      (user) => user._id.toString() === cityId
+      (user) => user._id.toString() === cityId,
     );
 
     if (isCityInCitysInterestedArr === undefined) {
@@ -300,18 +238,18 @@ const updateCity = async (req, res, next) => {
     if (req.file) {
       newImage = req.file.path;
     } else {
-      newImage = "https://res.cloudinary.com/dxpdntpqm/image/upload/v1689155185/Imagen_general_base_city_tvs85z.png";
+      newImage =
+        "https://res.cloudinary.com/dxpdntpqm/image/upload/v1689155185/Imagen_general_base_city_tvs85z.png";
     }
 
     const filterBody = {
-     
       city: req.body.city,
       difficulty: req.body.difficulty,
-      routeName: req.body.routeName,    
+      routeName: req.body.routeName,
       routeDistance: req.body.routeDistance,
       routeDuration: req.body.routeDuration,
       descriptionGeneral: req.body.descriptionGeneral,
-      routeLocation: req.body.routeLocation,      
+      routeLocation: req.body.routeLocation,
       itemsToCarry: req.body.itemsToCarry,
       image: newImage,
       routeState: req.body.routeState,
@@ -342,7 +280,7 @@ const deleteCity = async (req, res, next) => {
   try {
     const { id } = req.params;
     const deleteCity = await CityRoute.findByIdAndDelete(id);
-  
+
     if (deleteCity) {
       if (await CityRoute.findById(id)) {
         return res.status(404).json("failed deleting");
@@ -361,7 +299,7 @@ const deleteCity = async (req, res, next) => {
             { citiesCreated: id },
             {
               $pull: { citiesCreated: id },
-            }
+            },
           );
 
           try {
@@ -369,7 +307,7 @@ const deleteCity = async (req, res, next) => {
               { citiesCreated: id },
               {
                 $pull: { citysInterested: id },
-              }
+              },
             );
 
             try {
@@ -389,9 +327,7 @@ const deleteCity = async (req, res, next) => {
                 .json("failed updating user citysInterested");
             }
           } catch (error) {
-            return res
-              .status(404)
-              .json("failed updating user citysInterested");
+            return res.status(404).json("failed updating user citysInterested");
           }
         } catch (error) {
           return res.status(404).json("failed updating user citiesCreated");
@@ -407,7 +343,6 @@ const deleteCity = async (req, res, next) => {
 
 module.exports = {
   createCity,
-  addInterestedCityToUser,
   toggleInterestedCityToUser,
   getCityFollowingStatus,
   getAll,
