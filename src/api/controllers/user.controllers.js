@@ -501,7 +501,7 @@ const updateTechnologies = async (req, res, next) => {
     const customBody = {
       technologies: req.body.technologies,
     };
-    console.log(customBody);
+
     const oldUser = await User.findByIdAndUpdate(_id, customBody);
     if (oldUser) {
       return res.status(200).json({
@@ -511,6 +511,29 @@ const updateTechnologies = async (req, res, next) => {
       });
     } else {
       return res.status(404).json(UserErrors.FAIL_UPDATING_TECHNOLOGIES);
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const updateHabilities = async (req, res, next) => {
+  await User.syncIndexes();
+  try {
+    const { _id } = req.user;
+    const customBody = {
+      habilities: req.body.habilities,
+    };
+
+    const oldUser = await User.findByIdAndUpdate(_id, customBody);
+    if (oldUser) {
+      return res.status(200).json({
+        oldUser: oldUser,
+        newUser: await User.findById(_id),
+        status: "Succesfully habilities updated!",
+      });
+    } else {
+      return res.status(404).json(UserErrors.FAIL_UPDATING_HABILITIES);
     }
   } catch (error) {
     return next(error);
@@ -1120,6 +1143,7 @@ module.exports = {
   changePassword,
   update,
   updateTechnologies,
+  updateHabilities,
   deleteUser,
   getAll,
   getById,

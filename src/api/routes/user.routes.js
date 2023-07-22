@@ -3,13 +3,13 @@ const { upload } = require("../../middleware/files.middleware");
 const {
   registerSlow,
   sendCode,
-  //registerWithRedirect,
   login,
   changeForgottenPassword,
   sendPassword,
   changePassword,
   update,
   updateTechnologies,
+  updateHabilities,
   deleteUser,
   getAll,
   getById,
@@ -39,6 +39,7 @@ UserRoutes.post("/login", login);
 UserRoutes.patch("/changepassword", [isAuth], changePassword);
 UserRoutes.patch("/update/update", [isAuth], upload.single("image"), update);
 UserRoutes.patch("/updateTechnology", [isAuth], updateTechnologies);
+UserRoutes.patch("/updateHabilities", [isAuth], updateHabilities);
 UserRoutes.patch("/banned", [isAuth], banned);
 UserRoutes.patch("/following/:id", [isAuth], following);
 UserRoutes.get("/followingStatus/:id", [isAuth], getFollowingStatus);

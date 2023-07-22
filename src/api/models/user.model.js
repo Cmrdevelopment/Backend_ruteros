@@ -50,11 +50,19 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
 
-    technologies: [
-      {
-        type: String,
-      },
-    ],
+    technologies: {
+      type: [String],
+      required: true,
+      default: [],
+    },
+
+    // Habilities for Routers (Ruteros), like camping, orienting, ...
+    habilities: {
+      type: [String],
+      required: true,
+      default: [],
+    },
+
     mountainRoutesInterested: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "MountainRoute",

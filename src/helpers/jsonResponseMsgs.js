@@ -7,6 +7,7 @@ const UserErrors = {
   FAIL_CREATING_USER: "Fail creating user",
   FAIL_UPDATING_USER: "Fail updating user",
   FAIL_UPDATING_TECHNOLOGIES: "Fail updating technologies",
+  FAIL_UPDATING_HABILITIES: "Fail updating habilities",
   FAIL_UPDATING_RATINGS_BY_ME: "Fail updating ratings by me",
   FAIL_UPDATING_RATINGS_BY_OTHERS: "Fail updating ratings by others",
   FAIL_SEARCHING_USER: "Fail searching users",
