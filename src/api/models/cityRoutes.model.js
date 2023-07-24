@@ -21,20 +21,24 @@ const CityRouteSchema = new mongoose.Schema(
       enum: ["Easy", "Medium", "Hard"],
       required: true,
     },
+
     routeName: {
       // Nombre de la ruta antes offerTitle
       type: String,
       required: true,
     },
+
     // Distancia de la ruta antes Salario anual
     routeDistance: {
       type: Number,
       required: false,
     },
+
     routeDuration: {
       type: Number,
       required: false,
     },
+
     descriptionGeneral: {
       type: String,
       required: true,
