@@ -1,8 +1,8 @@
 const MountainRoute = require("../models/mountainRoute.model");
 const User = require("../models/user.model");
-const Ratings = require("../models/ratings.model");
-const Comment = require("../models/comment.model");
-const Offer = require("../models/offer.model");
+//const Ratings = require("../models/ratings.model");
+//const Comment = require("../models/comment.model");
+//const Offer = require("../models/offer.model");
 const { OfferErrors } = require("../../helpers/jsonResponseMsgs");
 const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 
@@ -257,7 +257,7 @@ const getMountainRouteById = async (req, res, next) => {
 //Revisar filterbody. Pregunta a quien revise esto: ¿Se puede meter por filterbody un valor cuyo required sea 'true'? ¿O dará problemas? En caso de problemas, revisar esto.
 const updateMountainRoute = async (req, res, next) => {
   try {
-    let newImage;
+    let newImage = "";
 
     if (req.file) {
       newImage = req.file.path;
@@ -298,7 +298,7 @@ const updateMountainRoute = async (req, res, next) => {
 //? -----------------------------DELETE ROUTE------------------------------
 //! -----------------------------------------------------------------------
 const deleteMountainRoute = async (req, res, next) => {
-  console.log("deleteRoute: =>", deleteRoute);
+  console.log("deleteMountainRoute: =>", deleteMountainRoute);
 
   try {
     const { id } = req.params;
