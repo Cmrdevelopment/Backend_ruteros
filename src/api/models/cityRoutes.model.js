@@ -9,11 +9,11 @@ const CityRouteSchema = new mongoose.Schema(
       required: true,
     },
 
-    city: {
-      type: [String],
-      required: true,
-      default: [],
-    },
+    // city: {
+    //   type: [String],
+    //   required: true,
+    //   default: [],
+    // },
 
     // Dificultad de la ruta de Ciudad antes tipo de la oferta
     difficulty: {
@@ -47,6 +47,26 @@ const CityRouteSchema = new mongoose.Schema(
     // Localización de la ruta antes Ciudad del trabajo
     routeLocation: {
       type: String,
+      required: true,
+    },
+
+    routeStartLatitude: {
+      type: Number,
+      required: true,
+    },
+
+    routeStartLongitude: {
+      type: Number,
+      required: true,
+    },
+
+    routeEndLatitude: {
+      type: Number,
+      required: true,
+    },
+
+    routeEndLongitude: {
+      type: Number,
       required: true,
     },
 

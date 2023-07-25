@@ -15,13 +15,16 @@ const createCity = async (req, res, next) => {
   try {
     const cityBody = {
       owner: req.user._id,
-      city: req.body.city,
       difficulty: req.body.difficulty,
       routeName: req.body.routeName,
       routeDistance: req.body.routeDistance,
       routeDuration: req.body.routeDuration,
       descriptionGeneral: req.body.descriptionGeneral,
       routeLocation: req.body.routeLocation,
+      routeStartLatitude: req.body.routeStartLatitude,
+      routeStartLongitude: req.body.routeStartLongitude,
+      routeEndLatitude: req.body.routeEndLatitude,
+      routeEndLongitude: req.body.routeEndLongitude,
       itemsToCarry: req.body.itemsToCarry,
       routeState: req.body.routeState,
     };
