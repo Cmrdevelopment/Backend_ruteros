@@ -472,11 +472,11 @@ const update = async (req, res, next) => {
       if (req.file) {
         updateUser.image == req.file.path
           ? testUpdate.push({
-              file: true,
-            })
+            file: true,
+          })
           : testUpdate.push({
-              file: false,
-            });
+            file: false,
+          });
       }
 
       return res.status(200).json({
@@ -574,7 +574,7 @@ const deleteUser = async (req, res, next) => {
 const getAll = async (req, res, next) => {
   try {
     const allUsers = await User.find().populate(
-      "habilities offersCreated offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
+      "habilities mountainRoutesCreated cityRoutesCreated mountainRoutesInterested cityRoutesInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
     );
     if (allUsers) {
       return res.status(200).json(allUsers);
