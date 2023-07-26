@@ -87,12 +87,12 @@ const toggleInterestedCityToUser = async (req, res, next) => {
 
     const cityInUserCitysInterestedArray = await User.findOne({
       _id: userId,
-      citysInterested: cityId,
+      cityRoutesInterested: cityId,
     });
 
     if (!cityInUserCitysInterestedArray) {
       await User.findByIdAndUpdate(userId, {
-        $push: { citysInterested: cityId },
+        $push: { cityRoutesInterested: cityId },
       });
       await CityRoute.findByIdAndUpdate(cityId, {
         $push: { interestedUsers: userId },
@@ -100,7 +100,7 @@ const toggleInterestedCityToUser = async (req, res, next) => {
       return res.status(200).json("City added to user's citysInterested array");
     } else {
       await User.findByIdAndUpdate(userId, {
-        $pull: { citysInterested: cityId },
+        $pull: { cityRoutesInterested: cityId },
       });
       await CityRoute.findByIdAndUpdate(cityId, {
         $pull: { interestedUsers: userId },
