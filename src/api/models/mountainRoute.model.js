@@ -40,6 +40,26 @@ const MountainRouteSchema = new mongoose.Schema(
       required: true,
     },
 
+    routeStartLatitude: {
+      type: Number,
+      required: true,
+    },
+
+    routeStartLongitude: {
+      type: Number,
+      required: true,
+    },
+
+    routeEndLatitude: {
+      type: Number,
+      required: true,
+    },
+
+    routeEndLongitude: {
+      type: Number,
+      required: true,
+    },
+
     //Cosas que se recomiendan llevar en la ruta
     itemsToCarry: {
       type: [String],

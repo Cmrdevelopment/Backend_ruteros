@@ -19,6 +19,10 @@ const createMountainRoute = async (req, res, next) => {
       routeDistance: req.body.routeDistance,
       descriptionGeneral: req.body.descriptionGeneral,
       routeLocation: req.body.routeLocation,
+      routeStartLatitude: req.body.routeStartLatitude,
+      routeStartLongitude: req.body.routeStartLongitude,
+      routeEndLatitude: req.body.routeEndLatitude,
+      routeEndLongitude: req.body.routeEndLongitude,
       itemsToCarry: req.body.itemsToCarry,
       routeState: req.body.routeState,
     };
