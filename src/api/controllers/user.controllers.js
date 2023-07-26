@@ -595,9 +595,10 @@ const getById = async (req, res, next) => {
 
     const userById = await User.findById(id)
       .populate(
-        "habilities offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
+        "habilities mountainRoutesInterested cityRoutesInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
       )
-      .populate({ path: "offersCreated", populate: { path: "comments" } })
+      .populate({ path: "mountainRoutesCreated", populate: { path: "comments" } })
+      .populate({ path: "cityRoutesCreated", populate: { path: "comments" } })
       .populate({
         path: "chats",
         populate: {

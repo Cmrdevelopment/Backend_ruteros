@@ -71,16 +71,16 @@ const UserSchema = new mongoose.Schema(
       default: [],
     },
 
-    offersCreated: {
+    cityRoutesCreated: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "Offer",
+      ref: "CityRoute",
       required: false,
       default: [],
     },
 
-    offersInterested: {
+    cityRoutesInterested: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "Offer",
+      ref: "CityRoute",
       required: false,
       default: [],
     },
