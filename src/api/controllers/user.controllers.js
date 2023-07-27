@@ -472,11 +472,11 @@ const update = async (req, res, next) => {
       if (req.file) {
         updateUser.image == req.file.path
           ? testUpdate.push({
-            file: true,
-          })
+              file: true,
+            })
           : testUpdate.push({
-            file: false,
-          });
+              file: false,
+            });
       }
 
       return res.status(200).json({
@@ -597,7 +597,10 @@ const getById = async (req, res, next) => {
       .populate(
         "habilities mountainRoutesInterested cityRoutesInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
       )
-      .populate({ path: "mountainRoutesCreated", populate: { path: "comments" } })
+      .populate({
+        path: "mountainRoutesCreated",
+        populate: { path: "comments" },
+      })
       .populate({ path: "cityRoutesCreated", populate: { path: "comments" } })
       .populate({
         path: "chats",

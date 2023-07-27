@@ -49,9 +49,12 @@ const create = async (req, res, next) => {
                   //////////////////////////
                   try {
                     if (req.body.referenceMountainRoute) {
-                      await MountainRoute.findByIdAndUpdate(req.body.referenceMountainRoute, {
-                        $push: { ratings: newRating._id },
-                      });
+                      await MountainRoute.findByIdAndUpdate(
+                        req.body.referenceMountainRoute,
+                        {
+                          $push: { ratings: newRating._id },
+                        },
+                      );
                       return res.status(200).json(savedRating);
                     }
                   } catch (error) {
@@ -62,7 +65,6 @@ const create = async (req, res, next) => {
                   }
                 }
                 /////////////////////////////
-
               } catch (error) {
                 next(error);
                 return res
@@ -72,7 +74,9 @@ const create = async (req, res, next) => {
             }
           } catch (error) {
             next(error);
-            return res.status(404).json("error updating referenceCityRoute model");
+            return res
+              .status(404)
+              .json("error updating referenceCityRoute model");
           }
         } catch (error) {
           next(error);
@@ -153,7 +157,9 @@ const deleteRating = async (req, res, next) => {
                 : "success_deleting_rating",
             });
           } catch (error) {
-            return res.status(404).json("failed updating cityRoute and mountainRoute");
+            return res
+              .status(404)
+              .json("failed updating cityRoute and mountainRoute");
           }
         } catch (error) {
           return res.status(404).json("failed updating user");
@@ -220,14 +226,14 @@ const getByReference = async (req, res, next) => {
       return res.status(200).json(ratings);
     } else {
       return res.status(404).json({
-        error: "Invalid reference type. It must be either 'User' or 'CityRoute' or 'MountainRoute'.",
+        error:
+          "Invalid reference type. It must be either 'User' or 'CityRoute' or 'MountainRoute'.",
       });
     }
   } catch (error) {
     return next(error);
   }
 };
-
 
 //! -----------------------------------------------------------------------
 //? ---------------------------- GET City Route Rating --------------------
