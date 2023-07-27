@@ -9,12 +9,6 @@ const CityRouteSchema = new mongoose.Schema(
       required: true,
     },
 
-    // city: {
-    //   type: [String],
-    //   required: true,
-    //   default: [],
-    // },
-
     // Dificultad de la ruta de Ciudad antes tipo de la oferta
     difficulty: {
       type: String,

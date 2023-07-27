@@ -143,7 +143,7 @@ const getCityFollowingStatus = async (req, res, next) => {
         .json({ error: "City to follow by loged user not found" });
     }
 
-    const isCityInCitysInterestedArr = logedUser.citysInterested.find(
+    const isCityInCitysInterestedArr = logedUser.cityRoutesInterested.find(
       (user) => user._id.toString() === cityId,
     );
 

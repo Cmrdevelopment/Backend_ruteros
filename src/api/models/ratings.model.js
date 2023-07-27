@@ -29,6 +29,18 @@ const RatingsSchema = new mongoose.Schema(
       ref: "Offer",
       required: false,
     },
+
+    referenceCityRoute: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CityRoute",
+      required: false,
+    },
+
+    referenceCityRoute: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "CityRoute",
+      required: false,
+    },
   },
 
   {

@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
-const Offer = require("../models/offer.model");
+// const Offer = require("../models/offer.model");
 const Ratings = require("../models/ratings.model");
+const CityRoute = require("../models/cityRoutes.model");
 //const PORT = process.env.PORT;
 //const BASE_URL = process.env.BASE_URL;
 //const BASE_URL_COMPLETE = `${BASE_URL}${PORT}`;
@@ -17,7 +18,8 @@ const create = async (req, res, next) => {
       score: req.body.score,
       owner: req.user._id,
       referenceDeveloper: req.body.referenceDeveloper,
-      referenceOffer: req.body.referenceOffer,
+      // referenceOffer: req.body.referenceOffer,
+      referenceCityRoute: req.body.referenceCityRoute,
     };
     const newRating = new Ratings(ratingBody);
     try {
@@ -30,8 +32,14 @@ const create = async (req, res, next) => {
             $push: { ratingsByMe: newRating._id },
           });
           try {
-            if (req.body.referenceOffer) {
-              await Offer.findByIdAndUpdate(req.body.referenceOffer, {
+            // if (req.body.referenceOffer) {
+            //   await Offer.findByIdAndUpdate(req.body.referenceOffer, {
+            //     $push: { ratings: newRating._id },
+            //   });
+            //   return res.status(200).json(savedRating);
+            // } else {
+            if (req.body.referenceCityRoute) {
+              await CityRoute.findByIdAndUpdate(req.body.referenceCityRoute, {
                 $push: { ratings: newRating._id },
               });
               return res.status(200).json(savedRating);
@@ -52,7 +60,7 @@ const create = async (req, res, next) => {
             }
           } catch (error) {
             next(error);
-            return res.status(404).json("error updating referenceOffer model");
+            return res.status(404).json("error updating referenceCityRoute model");
           }
         } catch (error) {
           next(error);
@@ -111,7 +119,7 @@ const deleteRating = async (req, res, next) => {
           );
 
           try {
-            await Offer.updateMany(
+            await CityRoute.updateMany(
               { ratings: id },
               {
                 $pull: { ratings: id },
@@ -126,7 +134,7 @@ const deleteRating = async (req, res, next) => {
                 : "success_deleting_rating",
             });
           } catch (error) {
-            return res.status(404).json("failed updating offer");
+            return res.status(404).json("failed updating cityRoute");
           }
         } catch (error) {
           return res.status(404).json("failed updating user");
@@ -176,11 +184,11 @@ const updateRating = async (req, res, next) => {
 const getByReference = async (req, res, next) => {
   try {
     const { refType, id } = req.params;
-    // refType indica si la valoración viene de una oferta (Offer) o un usuario (User), y id es el ID del usuaio queremos buscar sus valoraciones
+    // refType indica si la valoración viene de una ciudad (CityRoute) o un usuario (User), y id es el ID del usuaio queremos buscar sus valoraciones
     let ratings;
-    if (refType === "Offer") {
-      ratings = await Ratings.find({ referenceOffer: id }).populate(
-        "owner referenceOffer",
+    if (refType === "CityRoute") {
+      ratings = await Ratings.find({ referenceCityRoute: id }).populate(
+        "owner referenceCityRoute",
       );
       return res.status(200).json(ratings);
     } else if (refType === "User") {
@@ -188,8 +196,31 @@ const getByReference = async (req, res, next) => {
       return res.status(200).json(ratings);
     } else {
       return res.status(404).json({
-        error: "Invalid reference type. It must be either 'User' or 'Offer'.",
+        error: "Invalid reference type. It must be either 'User' or 'CityRoute'.",
       });
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
+
+//! -----------------------------------------------------------------------
+//? ---------------------------- GET City Route Rating --------------------
+//! -----------------------------------------------------------------------
+
+const getCityRouteRating = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const rating = await Ratings.find({ referenceCityRoute: id }).populate(
+      "owner referenceCityRoute",
+    );
+
+    if (rating) {
+      return res.status(200).json(rating);
+    } else {
+      return res.status(404).json("No rating found");
     }
   } catch (error) {
     return next(error);
@@ -202,4 +233,5 @@ module.exports = {
   deleteRating,
   updateRating,
   getByReference,
+  getCityRouteRating,
 };

@@ -4,6 +4,7 @@ const {
   deleteRating,
   updateRating,
   getByReference,
+  getCityRouteRating,
   getAll,
 } = require("../controllers/rating.controllers");
 
@@ -15,5 +16,6 @@ ratingRoutes.post("/", [isAuth], create);
 ratingRoutes.delete("/:id", [isAuth], deleteRating);
 ratingRoutes.patch("/:id", [isAuth], updateRating);
 ratingRoutes.get("/:refType/:id", [isAuth], getByReference);
+ratingRoutes.get("/getCityRouteRating/:id", [isAuth], getCityRouteRating);
 
 module.exports = ratingRoutes;
