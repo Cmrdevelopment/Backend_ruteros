@@ -2,6 +2,7 @@ const User = require("../models/user.model");
 // const Offer = require("../models/offer.model");
 const Ratings = require("../models/ratings.model");
 const CityRoute = require("../models/cityRoutes.model");
+const MountainRoute = require("../models/mountainRoute.model");
 //const PORT = process.env.PORT;
 //const BASE_URL = process.env.BASE_URL;
 //const BASE_URL_COMPLETE = `${BASE_URL}${PORT}`;
@@ -18,8 +19,8 @@ const create = async (req, res, next) => {
       score: req.body.score,
       owner: req.user._id,
       referenceDeveloper: req.body.referenceDeveloper,
-      // referenceOffer: req.body.referenceOffer,
       referenceCityRoute: req.body.referenceCityRoute,
+      referenceMountainRoute: req.body.referenceMountainRoute,
     };
     const newRating = new Ratings(ratingBody);
     try {
@@ -32,12 +33,6 @@ const create = async (req, res, next) => {
             $push: { ratingsByMe: newRating._id },
           });
           try {
-            // if (req.body.referenceOffer) {
-            //   await Offer.findByIdAndUpdate(req.body.referenceOffer, {
-            //     $push: { ratings: newRating._id },
-            //   });
-            //   return res.status(200).json(savedRating);
-            // } else {
             if (req.body.referenceCityRoute) {
               await CityRoute.findByIdAndUpdate(req.body.referenceCityRoute, {
                 $push: { ratings: newRating._id },
@@ -50,7 +45,24 @@ const create = async (req, res, next) => {
                     $push: { ratingsByOthers: newRating._id },
                   });
                   return res.status(200).json(savedRating);
+                } else {
+                  //////////////////////////
+                  try {
+                    if (req.body.referenceMountainRoute) {
+                      await MountainRoute.findByIdAndUpdate(req.body.referenceMountainRoute, {
+                        $push: { ratings: newRating._id },
+                      });
+                      return res.status(200).json(savedRating);
+                    }
+                  } catch (error) {
+                    next(error);
+                    return res
+                      .status(404)
+                      .json("error updating referenceMountainRoute model");
+                  }
                 }
+                /////////////////////////////
+
               } catch (error) {
                 next(error);
                 return res
@@ -126,6 +138,13 @@ const deleteRating = async (req, res, next) => {
               },
             );
 
+            await MountainRoute.updateMany(
+              { ratings: id },
+              {
+                $pull: { ratings: id },
+              },
+            );
+
             /// por ultimo lanzamos un test en el runtime para ver si se ha borrado la review correctamente
             return res.status(200).json({
               deletedObject: deletedRating,
@@ -134,7 +153,7 @@ const deleteRating = async (req, res, next) => {
                 : "success_deleting_rating",
             });
           } catch (error) {
-            return res.status(404).json("failed updating cityRoute");
+            return res.status(404).json("failed updating cityRoute and mountainRoute");
           }
         } catch (error) {
           return res.status(404).json("failed updating user");
@@ -184,11 +203,16 @@ const updateRating = async (req, res, next) => {
 const getByReference = async (req, res, next) => {
   try {
     const { refType, id } = req.params;
-    // refType indica si la valoración viene de una ciudad (CityRoute) o un usuario (User), y id es el ID del usuaio queremos buscar sus valoraciones
+    // refType indica si la valoración viene de una ciudad (CityRoute) o una ruta de montaña (MountainRoute) o un usuario (User), y id es el ID del usuaio queremos buscar sus valoraciones
     let ratings;
     if (refType === "CityRoute") {
       ratings = await Ratings.find({ referenceCityRoute: id }).populate(
         "owner referenceCityRoute",
+      );
+      return res.status(200).json(ratings);
+    } else if (refType === "MountainRoute") {
+      ratings = await Ratings.find({ referenceMountainRoute: id }).populate(
+        "owner referenceMountainRoute",
       );
       return res.status(200).json(ratings);
     } else if (refType === "User") {
@@ -196,7 +220,7 @@ const getByReference = async (req, res, next) => {
       return res.status(200).json(ratings);
     } else {
       return res.status(404).json({
-        error: "Invalid reference type. It must be either 'User' or 'CityRoute'.",
+        error: "Invalid reference type. It must be either 'User' or 'CityRoute' or 'MountainRoute'.",
       });
     }
   } catch (error) {

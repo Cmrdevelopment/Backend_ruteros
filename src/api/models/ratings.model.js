@@ -36,9 +36,9 @@ const RatingsSchema = new mongoose.Schema(
       required: false,
     },
 
-    referenceCityRoute: {
+    referenceMountainRoute: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "CityRoute",
+      ref: "MountainRoute",
       required: false,
     },
   },

@@ -6,7 +6,6 @@ const {
   getMountainRouteFollowingStatus,
   getAllMountainRoutes,
   getMountainRouteById,
-  //getByRouteName,
   updateMountainRoute,
   deleteMountainRoute,
 } = require("../controllers/mountainRoute.controller");

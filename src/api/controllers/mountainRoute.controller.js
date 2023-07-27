@@ -130,7 +130,7 @@ const toggleInterestedMountainRouteToUser = async (req, res, next) => {
       return res
         .status(200)
         .json(
-          "Mountain route removed from user's mountainRouteInterested array",
+          "Mountain route removed from user's mountainRoutesInterested array",
         );
     }
   } catch (error) {
@@ -173,18 +173,18 @@ const getMountainRouteFollowingStatus = async (req, res, next) => {
       );
 
     if (isRouteInRoutesInterestedArr === undefined) {
-      // La oferta a seguir no está en el array 'offersInterested',
+      // La ruta a seguir no está en el array 'mountainRoutesInterested',
       // reportamos que la oferta no está en el array.
       return res.status(200).json({
         status: "Route is Not in user's mountainRoutesInterested array",
       });
     } else {
-      // La oferta a seguir está en el array 'offersInterested',
+      // La ruta a seguir está en el array 'mountainRoutesInterested',
       // por lo tanto reportamos al front que la
       // oferta en la que está ineresado el user está
-      // en el array offersInterested.
+      // en el array mountainRoutesInterested.
       return res.status(200).json({
-        status: "Route is in user's routesInterested array",
+        status: "Route is in user's mountainRoutesInterested array",
       });
     }
   } catch (error) {
@@ -378,7 +378,6 @@ module.exports = {
   getMountainRouteFollowingStatus,
   getAllMountainRoutes,
   getMountainRouteById,
-  //getByRouteName,
   updateMountainRoute,
   deleteMountainRoute,
 };
