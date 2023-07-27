@@ -9,32 +9,32 @@ const MountainRouteSchema = new mongoose.Schema(
       required: true,
     },
 
-    // anteriormente offerType
     difficulty: {
       type: String,
       enum: ["Easy", "Medium", "Hard"],
       required: true,
     },
+
     routeName: {
-      //Anteriormente offerTitle
       type: String,
       required: true,
     },
-    // Salario anual
+
     routeDistance: {
       type: Number,
       required: false,
     },
+
     routeDuration: {
       type: Number,
       required: false,
     },
+
     descriptionGeneral: {
       type: String,
       required: true,
     },
 
-    // Ciudad del trabajo
     routeLocation: {
       type: String,
       required: true,

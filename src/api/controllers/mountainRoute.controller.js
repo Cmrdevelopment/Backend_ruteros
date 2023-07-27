@@ -1,8 +1,5 @@
 const MountainRoute = require("../models/mountainRoute.model");
 const User = require("../models/user.model");
-//const Ratings = require("../models/ratings.model");
-//const Comment = require("../models/comment.model");
-//const Offer = require("../models/offer.model");
 const { OfferErrors } = require("../../helpers/jsonResponseMsgs");
 const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 
@@ -29,16 +26,6 @@ const createMountainRoute = async (req, res, next) => {
 
     const newRoute = new MountainRoute(mountainRouteBody);
 
-    // try {
-    //     if (req.file) {
-    //       newRoute.image = req.file.path;
-    //     } else {
-    //       newRoute.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
-    //     }
-    //   } catch (error) {
-    //     return res.status(404).json("Error creating route");
-    //   }
-
     try {
       if (req.files) {
         newRoute.image = req.files[0].path;
@@ -51,19 +38,6 @@ const createMountainRoute = async (req, res, next) => {
     } catch (error) {
       return res.status(404).json("Error creating mountain route");
     }
-
-    // try {
-    //   if (req.files) {
-    //     newRoute.image = req.files[0].path;
-    //     const fileUrls = req.files.map(file => file.path);
-
-    //     newRoute.images = fileUrls;
-    //   } else {
-    //     newRoute.image = "https://pic.onlinewebfonts.com/svg/img_447092.png";
-    //   }
-    // } catch (error) {
-    //   return res.status(404).json("Error creating route");
-    // }
 
     try {
       // aqui guardamos en la base de datos
@@ -235,26 +209,6 @@ const getMountainRouteById = async (req, res, next) => {
   }
 };
 
-// //! ---------------------------------------------------------------------
-// //? ----------------------------- GET BY ROUTE NAME ------------------------
-// //! ---------------------------------------------------------------------
-// //Pregunta para quien lo revise: ¿Tiene que haber aquí también un .populate?
-// const getByRouteName = async (req, res, next) => {
-//   try {
-//     const { routeName } = req.params;
-
-//     const RouteNameByName = await MountainRoute.find({ routeName });
-
-//     if (RouteNameByName) {
-//       return res.status(200).json(RouteNameByName);
-//     } else {
-//       return res.status(404).json(OfferErrors.FAIL_SEARCHING_OFFER_BY_NAME);
-//     }
-//   } catch (error) {
-//     return next(error);
-//   }
-// };
-
 //! -------------------------------------------------------------------
 //? ----------------------------- UPDATE --------------------------------
 //! ---------------------------------------------------------------------
@@ -302,8 +256,6 @@ const updateMountainRoute = async (req, res, next) => {
 //? -----------------------------DELETE ROUTE------------------------------
 //! -----------------------------------------------------------------------
 const deleteMountainRoute = async (req, res, next) => {
-  console.log("deleteMountainRoute: =>", deleteMountainRoute);
-
   try {
     const { id } = req.params;
     const deletedRoute = await MountainRoute.findByIdAndDelete(id);
@@ -313,13 +265,8 @@ const deleteMountainRoute = async (req, res, next) => {
         return res.status(404).json("failed deleting");
       } else {
         if (deletedRoute.image) {
-          console.log("image Existe");
-
           deleteImgCloudinary(deletedRoute.image);
-        } else {
-          console.log("image NO existe");
         }
-        // deleteImgCloudinary(deletedOffer.image);
 
         try {
           await User.updateMany(

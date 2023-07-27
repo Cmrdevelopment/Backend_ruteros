@@ -9,20 +9,20 @@ const CityRouteSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Dificultad de la ruta de Ciudad antes tipo de la oferta
+    // Dificultad de la ruta de Ciudad
     difficulty: {
       type: String,
       enum: ["Easy", "Medium", "Hard"],
       required: true,
     },
 
+    // Nombre de la ruta 
     routeName: {
-      // Nombre de la ruta antes offerTitle
       type: String,
       required: true,
     },
 
-    // Distancia de la ruta antes Salario anual
+    // Distancia de la ruta
     routeDistance: {
       type: Number,
       required: false,
@@ -38,7 +38,7 @@ const CityRouteSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Localización de la ruta antes Ciudad del trabajo
+    // Localización de la ruta
     routeLocation: {
       type: String,
       required: true,
@@ -83,12 +83,12 @@ const CityRouteSchema = new mongoose.Schema(
       default: [],
     },
 
-    citiesCreated: {
-      type: [mongoose.Schema.Types.ObjectId],
-      ref: "CityRoute",
-      required: false,
-      default: [],
-    },
+    // citiesCreated: {
+    //   type: [mongoose.Schema.Types.ObjectId],
+    //   ref: "CityRoute",
+    //   required: false,
+    //   default: [],
+    // },
 
     comments: {
       type: [mongoose.Schema.Types.ObjectId],
