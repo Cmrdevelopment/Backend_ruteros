@@ -18,7 +18,8 @@ const createComment = async (req, res, next) => {
       owner: req.user._id,
       commentType: req.body.commentType,
       referenceUser: req.body.referenceUser,
-      referenceOfferComment: req.body.referenceOfferComment,
+      referenceMountainRouteComment: req.body.referenceMountainRouteComment,
+      referenceCityRouteComment: req.body.referenceCityRouteComment,
     };
     const newComment = new Comment(commentBody);
     try {
@@ -30,11 +31,13 @@ const createComment = async (req, res, next) => {
             $push: { commentsByMe: newComment._id },
           });
           try {
-            if (req.body.referenceOfferComment) {
-              await Offer.findByIdAndUpdate(req.body.referenceOfferComment, {
+            if (req.body.referenceMountainRouteComment) {
+              await MountainRoute.findByIdAndUpdate(req.body.referenceMountainRouteComment, {
                 $push: { comments: newComment._id },
+            
               });
               return res.status(200).json(savedComment);
+            
             } else {
               try {
                 if (req.body.referenceUser) {
@@ -42,7 +45,20 @@ const createComment = async (req, res, next) => {
                     $push: { commentsByOthers: newComment._id },
                   });
                   return res.status(200).json(savedComment);
-                }
+                } else {
+                  try {
+                    if (req.body.referenceCityRouteComment) {
+                      await CityRoute.findByIdAndUpdate(req.body.referenceCityRouteComment, {
+                        $push: { comments: newComment._id },
+                      });
+                      return res.status(200).json(savedComment);
+                    }
+                  } catch (error) {
+                    return res
+                      .status(404)
+                      .json("error updating user referenceCityRoute");
+                  }
+                } 
               } catch (error) {
                 return res
                   .status(404)
@@ -50,7 +66,7 @@ const createComment = async (req, res, next) => {
               }
             }
           } catch (error) {
-            return res.status(404).json("error updating referenceOffer model");
+            return res.status(404).json("error updating referenceMountainRoute model");
           }
         } catch (error) {
           return res.status(404).json("error updating owner user comment ");
@@ -187,19 +203,24 @@ const getByReference = async (req, res, next) => {
     const { refType, id } = req.params;
 
     let comments;
-    if (refType === "Offer") {
-      comments = await Comment.find({ referenceOfferComment: id })
+    if (refType === "MountainRoute") {
+      comments = await Comment.find({ referenceMountainRouteComment: id })
         .sort({ createdAt: -1 })
-        .populate("owner referenceOfferComment");
+        .populate("owner referenceMountainRouteComment");
       return res.status(200).json(comments);
     } else if (refType === "User") {
       comments = await Comment.find({ referenceUser: id })
         .sort({ createdAt: -1 })
         .populate("owner");
       return res.status(200).json(comments);
-    } else {
+    } else if(refType === "CityRoute") {
+        comments = await Comment.find({ referenceCityRouteComment: id })
+          .sort({ createdAt: -1 })
+          .populate("owner referenceCityRouteComment");
+        return res.status(200).json(comments);
+     } else {
       return res.status(404).json({
-        error: "Invalid reference type. It must be either 'User' or 'Offer'.",
+        error: "Invalid reference type. It must be either 'User' or 'CityRoute' or 'MountainRoute'.",
       });
     }
   } catch (error) {
