@@ -10,7 +10,7 @@ const createExperience = async (req, res) => {
   try {
     const experienceBody = {
       owner: req.user._id,
-      workedWith: req.body.workedWith,
+      title: req.body.title,
       duration: req.body.duration,
       habilities: req.body.habilities,
       description: req.body.description,

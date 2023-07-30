@@ -8,8 +8,8 @@ const ExperienceSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    // Empresa donde se trabajó
-    workedWith: {
+    // Nombre/título de la experiencia (hace referencía a una ruta que se quiera describir)
+    title: {
       type: String,
       required: true,
     },
