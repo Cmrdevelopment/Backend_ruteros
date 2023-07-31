@@ -16,7 +16,7 @@ const Chat = require("../models/chat.model");
 //! -----------------------------------------------------------------------------
 const createChat = async (req, res, next) => {
   try {
-    // console.log(req.body.referenceOfferComment);
+    
     const { userOne, userTwo } = req.body;
 
     const chatExistOne = await User.findOne({ userOne, userTwo });
@@ -95,7 +95,7 @@ const newComment = async (req, res, next) => {
             });
             try {
               if (req.body.referenceMountainRouteComment) {
-                // console.log("entro en la 91");
+                
                 await MountainRoute.findByIdAndUpdate(req.body.referenceMountainRouteComment, {
                   $push: { comments: newComment._id },
                 });
@@ -118,7 +118,7 @@ const newComment = async (req, res, next) => {
                       ? req.body.referenceUser
                       : userReal.owner._id,  /*userReal.owner[0]._id,*/
                   });
-                  console.log();
+                  
                   const chatExistTwo = await Chat.findOne({
                     userTwo: req.user._id,
                     userOne: req.body.referenceUser
@@ -126,12 +126,10 @@ const newComment = async (req, res, next) => {
                       : userReal.owner._id, /*userReal.owner[0]._id,*/
                   });
 
-                  console.log(chatExistOne);
-                  console.log(chatExistTwo);
+                  
 
                   if (!chatExistOne && !chatExistTwo) {
-                    console.log("ENTRO POR EL IF");
-                    console.log({ userOne, userTwo });
+                    
                     const newChat = new Chat({ userOne, userTwo });
                     newChat.menssages = [newComment._id];
                     try {
@@ -164,11 +162,11 @@ const newComment = async (req, res, next) => {
                         }
                       }
                     } catch (error) {
-                      console.log("entro en el error ");
+                     
                       return res.status(404).json(error.message);
                     }
                   } else {
-                    console.log("entro abajo");
+                    
                     try {
                       await Chat.findByIdAndUpdate(
                         chatExistOne ? chatExistOne._id : chatExistTwo._id,
@@ -189,7 +187,7 @@ const newComment = async (req, res, next) => {
                   return next(error);
                 }
               } else if (req.body.referenceCityRouteComment) {
-                // console.log("entro en la 91");
+                
                 await CityRoute.findByIdAndUpdate(req.body.referenceCityRouteComment, {
                   $push: { comments: newComment._id },
                 });
@@ -212,7 +210,7 @@ const newComment = async (req, res, next) => {
                       ? req.body.referenceUser
                       : userReal.owner._id,  /*userReal.owner[0]._id,*/
                   });
-                  console.log();
+                  
                   const chatExistTwo = await Chat.findOne({
                     userTwo: req.user._id,
                     userOne: req.body.referenceUser
@@ -220,12 +218,10 @@ const newComment = async (req, res, next) => {
                       : userReal.owner._id, /*userReal.owner[0]._id,*/
                   });
 
-                  console.log(chatExistOne);
-                  console.log(chatExistTwo);
+                  
 
                   if (!chatExistOne && !chatExistTwo) {
-                    console.log("ENTRO POR EL IF");
-                    console.log({ userOne, userTwo });
+                   
                     const newChat = new Chat({ userOne, userTwo });
                     newChat.menssages = [newComment._id];
                     try {
@@ -258,11 +254,11 @@ const newComment = async (req, res, next) => {
                         }
                       }
                     } catch (error) {
-                      console.log("entro en el error ");
+                      
                       return res.status(404).json(error.message);
                     }
                   } else {
-                    console.log("entro abajo");
+                    
                     try {
                       await Chat.findByIdAndUpdate(
                         chatExistOne ? chatExistOne._id : chatExistTwo._id,
@@ -346,7 +342,7 @@ const newComment = async (req, res, next) => {
                         }
                       } else {
                         try {
-                          console.log("entro por push");
+                         
                           await Chat.findByIdAndUpdate(
                             chatExistOne ? chatExistOne._id : chatExistTwo._id,
                             { $push: { menssages: newComment.id } },

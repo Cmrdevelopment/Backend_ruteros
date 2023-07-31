@@ -24,7 +24,7 @@ const createComment = async (req, res, next) => {
     const newComment = new Comment(commentBody);
     try {
       const savedComment = await newComment.save();
-      console.log("entro", savedComment);
+      
       if (savedComment) {
         try {
           await User.findByIdAndUpdate(req.user._id, {
@@ -148,7 +148,7 @@ const toggleFavorite = async (req, res, next) => {
     const userId = req.user._id;
     //userIdPageDetail es el propietario del comentario
     const userIdPageDetail = req.body.userIdPageDetail;
-    console.log(userIdPageDetail);
+   
 
     const commentFav = await Comment.findById(commentId);
     const user = await User.findById(userId);

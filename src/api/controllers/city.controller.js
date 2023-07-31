@@ -278,7 +278,7 @@ const updateCity = async (req, res, next) => {
 //? -------------------------------DELETE CITY ---------------------------------
 //! -----------------------------------------------------------------------
 const deleteCity = async (req, res, next) => {
-  console.log("deleteCity: =>", deleteCity);
+  
 
   try {
     const { id } = req.params;

@@ -724,7 +724,7 @@ const changeEmail = async (req, res, next) => {
   }
 };
 const sendNewCode = async (req, res, next) => {
-  //console.log("despues redirect", req.body);
+  
   try {
     const { id } = req.params;
     const userDB = await User.findById(id);
