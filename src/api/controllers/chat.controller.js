@@ -3,6 +3,8 @@ const User = require("../models/user.model");
 //const { setError } = require("../../helpers/handle-error");
 
 //const Ratings = require("../models/ratings.model");
+const CityRoute = require ('../models/cityRoutes.model');
+const MountainRoute = require('../models/mountainRoute.model')
 const Offer = require("../models/offer.model");
 //const Experience = require("../models/experience.model");
 const Comment = require("../models/comment.model");
@@ -14,7 +16,7 @@ const Chat = require("../models/chat.model");
 //! -----------------------------------------------------------------------------
 const createChat = async (req, res, next) => {
   try {
-    console.log(req.body.referenceOfferComment);
+    // console.log(req.body.referenceOfferComment);
     const { userOne, userTwo } = req.body;
 
     const chatExistOne = await User.findOne({ userOne, userTwo });
@@ -79,7 +81,8 @@ const newComment = async (req, res, next) => {
         owner: req.user._id,
         commentType: "Privado",
         referenceUser: req.body.referenceUser,
-        referenceOfferComment: req.body.referenceOfferComment,
+        referenceMountainRouteComment: req.body.referenceMountainRouteComment,
+        referenceCityRouteComment: req.body.referenceCityRouteComment,
       };
       const newComment = new Comment(commentBody);
       try {
@@ -91,14 +94,14 @@ const newComment = async (req, res, next) => {
               $push: { commentsByMe: newComment._id },
             });
             try {
-              if (req.body.referenceOfferComment) {
-                console.log("entro en la 91");
-                await Offer.findByIdAndUpdate(req.body.referenceOfferComment, {
+              if (req.body.referenceMountainRouteComment) {
+                // console.log("entro en la 91");
+                await MountainRoute.findByIdAndUpdate(req.body.referenceMountainRouteComment, {
                   $push: { comments: newComment._id },
                 });
                 try {
-                  const userReal = await Offer.findById(
-                    req.body.referenceOfferComment,
+                  const userReal = await MountainRoute.findById(
+                    req.body.referenceMountainRouteComment,
                   ).populate("owner");
                   await User.findByIdAndUpdate(userReal.owner[0]._id, {
                     $push: { commentsByOthers: newComment._id },

@@ -47,7 +47,7 @@ const UserSchema = new mongoose.Schema(
     rol: {
       type: String,
       enum: ["admin", "freelance", "company"],
-      required: true,
+      required: false,
     },
 
     // Habilities for Routers (Ruteros), like camping, orienting, ...

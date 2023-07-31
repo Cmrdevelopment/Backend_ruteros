@@ -22,7 +22,7 @@ const {
   banned,
   following,
   getFollowingStatus,
-  updateUserRol,
+  // updateUserRol,
 } = require("../controllers/user.controllers");
 
 const express = require("express");
@@ -46,7 +46,7 @@ UserRoutes.post("/changeEmail", [isAuth], changeEmail);
 UserRoutes.post("/verifyNewEmail", [isAuth], verifyNewEmail);
 UserRoutes.post("/login/autologin", autoLogin);
 UserRoutes.post("/resend", resendCode);
-UserRoutes.patch("/rol", [isAuth], updateUserRol);
+// UserRoutes.patch("/rol", [isAuth], updateUserRol);
 
 //!---------------- REDIRECT-------------------------------
 UserRoutes.get("/register/sendMail/:id", sendCode);
