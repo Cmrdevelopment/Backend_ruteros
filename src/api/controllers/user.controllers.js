@@ -21,58 +21,6 @@ const PORT = process.env.PORT;
 const BASE_URL = process.env.BASE_URL;
 const BASE_URL_COMPLETE = `${BASE_URL}${PORT}`;
 
-// //! -----------------------------------------------------------------------------
-// //? ----------------------------REGISTER CORTO EN CODIGO ------------------------
-// //! -----------------------------------------------------------------------------
-// const register = async (req, res, next) => {
-//   let catchImg = req.file?.path;
-//   //console.log('register -> req.body: ', req.body)
-//   try {
-//     let confirmationCode = randomCode();
-//     const { email, name } = req.body;
-
-//     const userExist = await User.findOne({ email }, { name });
-
-//     if (!userExist) {
-//       const newUser = new User({ ...req.body, confirmationCode });
-//       if (req.file) {
-//         newUser.image = req.file.path;
-//       } else {
-//         newUser.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
-//       }
-
-//       try {
-//         const userSave = await newUser.save();
-
-//         if (userSave) {
-//           sendConfirmationCodeByEmail(email, name, confirmationCode);
-//           setTimeout(() => {
-//             if (getTestEmailSend()) {
-//               return res.status(200).json({
-//                 user: userSave,
-//                 confirmationCode,
-//               });
-//             } else {
-//               return res.status(404).json({
-//                 user: userSave,
-//                 confirmationCode: "Error, resend code",
-//               });
-//             }
-//           }, 1100);
-//         }
-//       } catch (error) {
-//         return res.status(404).json("failed saving user");
-//       }
-//     } else {
-//       if (req.file) deleteImgCloudinary(catchImg);
-
-//       return res.status(409).json("This user already exist");
-//     }
-//   } catch (error) {
-//     if (req.file) deleteImgCloudinary(catchImg);
-//     return next(error);
-//   }
-// };
 
 //! -----------------------------------------------------------------------------
 //? ----------------------------REGISTER LARGO EN CODIGO ------------------------
@@ -92,11 +40,21 @@ const registerSlow = async (req, res, next) => {
 
     if (!userExist) {
       const newUser = new User({ ...req.body, confirmationCode });
-      if (req.file) {
-        newUser.image = req.file.path;
+
+      if (req.files) {
+        newUser.image = req.files[0].path;
+        const fileUrls = req.files.map((file) => file.path);
+
+        newUser.images = fileUrls;
       } else {
         newUser.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
       }
+
+      // if (req.file) {
+      //   newUser.image = req.file.path;
+      // } else {
+      //   newUser.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
+      // }
 
       try {
         const userSave = await newUser.save();
@@ -142,57 +100,20 @@ const registerSlow = async (req, res, next) => {
         return res.status(404).json("failed saving user");
       }
     } else {
-      if (req.file) deleteImgCloudinary(catchImg);
+      // if (req.file) deleteImgCloudinary(catchImg);
+      if (req.files) {
+        req.files.map((image) => deleteImgCloudinary(image.path));
+      }
       return res.status(409).json("This user already exist");
     }
   } catch (error) {
-    if (req.file) deleteImgCloudinary(catchImg);
+    // if (req.file) deleteImgCloudinary(catchImg);
+    if (req.files) {
+      req.files.map((image) => deleteImgCloudinary(image.path));
+    }
     return next(error);
   }
 };
-//! -----------------------------------------------------------------------------
-//? ----------------------------REGISTER CON REDIRECT----------------------------
-//! -----------------------------------------------------------------------------
-// const registerWithRedirect = async (req, res, next) => {
-//   let catchImg = req.file?.path;
-
-//   console.log("registerWithRedirect -> req.body: ", req.body);
-
-//   try {
-//     let confirmationCode = randomCode();
-
-//     const userExist = await User.findOne(
-//       { email: req.body.email },
-//       { name: req.body.name }
-//     );
-//     if (!userExist) {
-//       const newUser = new User({ ...req.body, confirmationCode });
-//       if (req.file) {
-//         newUser.image = req.file.path;
-//       } else {
-//         newUser.image = "https://pic.onlinewebfonts.com/svg/img_181369.png";
-//       }
-
-//       try {
-//         const userSave = await newUser.save();
-
-//         if (userSave) {
-//           return res.redirect(
-//             `${BASE_URL_COMPLETE}/api/v1/users/register/sendMail/${userSave._id}`
-//           );
-//         }
-//       } catch (error) {
-//         return res.status(404).json("failed saving user");
-//       }
-//     } else {
-//       if (req.file) deleteImgCloudinary(catchImg);
-//       return res.status(409).json("This user already exist");
-//     }
-//   } catch (error) {
-//     if (req.file) deleteImgCloudinary(catchImg);
-//     return next(error);
-//   }
-// };
 
 //! -----------------------------------------------------------------------------
 //? ------------------ CONTRALADORES QUE PUEDEN SER REDIRECT --------------------
@@ -472,11 +393,11 @@ const update = async (req, res, next) => {
       if (req.file) {
         updateUser.image == req.file.path
           ? testUpdate.push({
-              file: true,
-            })
+            file: true,
+          })
           : testUpdate.push({
-              file: false,
-            });
+            file: false,
+          });
       }
 
       return res.status(200).json({
@@ -526,44 +447,51 @@ const updateHabilities = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
   try {
     const { _id, image } = req.user;
-    await User.findByIdAndDelete(_id);
-    if (await User.findById(_id)) {
-      return res.status(404).json(UserErrors.FAIL_DELETING_USER);
-    } else {
-      deleteImgCloudinary(image);
+    const deleteUser = await User.findByIdAndDelete(_id);
 
-      await Ratings.updateMany(
-        { users: _id },
-        {
-          $pull: { users: _id },
-        },
-      );
+    if (deleteUser) {
+      if (await User.findById(_id)) {
+        return res.status(404).json(UserErrors.FAIL_DELETING_USER);
+      } else {
+        // deleteImgCloudinary(image);
 
-      await Offer.updateMany(
-        { users: _id },
-        {
-          $pull: { users: _id },
-        },
-      );
+        if (deleteUser.images) {
+          deleteUser.images.map((image) => deleteImgCloudinary(image));
+        }
 
-      await Experience.updateMany(
-        { users: _id },
-        {
-          $pull: { users: _id },
-        },
-      );
+        await Ratings.updateMany(
+          { users: _id },
+          {
+            $pull: { users: _id },
+          },
+        );
 
-      await Comment.updateMany(
-        { users: _id },
-        {
-          $pull: { users: _id },
-        },
-      );
+        await Offer.updateMany(
+          { users: _id },
+          {
+            $pull: { users: _id },
+          },
+        );
 
-      return res.status(200).json(UserSuccess.SUCCESS_DELETING_USER);
+        await Experience.updateMany(
+          { users: _id },
+          {
+            $pull: { users: _id },
+          },
+        );
+
+        await Comment.updateMany(
+          { users: _id },
+          {
+            $pull: { users: _id },
+          },
+        );
+
+        return res.status(200).json(UserSuccess.SUCCESS_DELETING_USER);
+      }
     }
   } catch (error) {
-    deleteImgCloudinary(req.user.image);
+    // deleteImgCloudinary(req.user.image);
     return next(error);
   }
 };
@@ -724,7 +652,7 @@ const changeEmail = async (req, res, next) => {
   }
 };
 const sendNewCode = async (req, res, next) => {
-  
+
   try {
     const { id } = req.params;
     const userDB = await User.findById(id);

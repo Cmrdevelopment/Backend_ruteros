@@ -278,8 +278,6 @@ const updateCity = async (req, res, next) => {
 //? -------------------------------DELETE CITY ---------------------------------
 //! -----------------------------------------------------------------------
 const deleteCity = async (req, res, next) => {
-  
-
   try {
     const { id } = req.params;
     const deleteCity = await CityRoute.findByIdAndDelete(id);
@@ -288,14 +286,17 @@ const deleteCity = async (req, res, next) => {
       if (await CityRoute.findById(id)) {
         return res.status(404).json("failed deleting");
       } else {
-        if (deleteCity.image) {
-          console.log("image Existe");
+        // if (deleteCity.image) {
+        //   console.log("image Existe");
 
-          deleteImgCloudinary(deleteCity.image);
-        } else {
-          console.log("image NO existe");
+        //   deleteImgCloudinary(deleteCity.image);
+        // } else {
+        //   console.log("image NO existe");
+        // }
+
+        if (deleteCity.images) {
+          deleteCity.images.map((image) => deleteImgCloudinary(image));
         }
-        // deleteImgCloudinary(deletedOffer.image);
 
         try {
           await User.updateMany(

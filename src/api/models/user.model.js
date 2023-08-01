@@ -15,8 +15,16 @@ const UserSchema = new mongoose.Schema(
       validate: [validator.isStrongPassword],
       minlength: [8, "Min 8 characters"],
     },
+
     image: {
       type: String,
+    },
+
+    // imagen del Carrusel
+    images: {
+      type: [String],
+      required: true,
+      default: [],
     },
 
     email: {

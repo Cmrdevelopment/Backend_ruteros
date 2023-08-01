@@ -264,8 +264,12 @@ const deleteMountainRoute = async (req, res, next) => {
       if (await MountainRoute.findById(id)) {
         return res.status(404).json("failed deleting");
       } else {
-        if (deletedRoute.image) {
-          deleteImgCloudinary(deletedRoute.image);
+        // if (deletedRoute.image) {
+        //   deleteImgCloudinary(deletedRoute.image);
+        // }
+
+        if (deletedRoute.images) {
+          deletedRoute.images.map((image) => deleteImgCloudinary(image));
         }
 
         try {
