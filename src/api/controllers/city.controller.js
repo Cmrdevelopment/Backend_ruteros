@@ -52,7 +52,7 @@ const createCity = async (req, res, next) => {
         // ahora lo que tenemos que guardar el id en el array de city de quien lo creo
         try {
           await User.findByIdAndUpdate(req.user._id, {
-            $push: { citiesCreated: newCity._id },
+            $push: { cityRoutesCreated: newCity._id },
           });
           return res.status(200).json(savedCity);
         } catch (error) {
