@@ -1,5 +1,4 @@
 const User = require("../models/user.model");
-// const Offer = require("../models/offer.model");
 const Ratings = require("../models/ratings.model");
 const CityRoute = require("../models/cityRoutes.model");
 const MountainRoute = require("../models/mountainRoute.model");

@@ -100,7 +100,7 @@ const MountainRouteSchema = new mongoose.Schema(
       default: [],
     },
 
-    // OfferState
+    // routeState
     routeState: {
       type: String,
       enum: ["Close", "Abandoned", "Open"],

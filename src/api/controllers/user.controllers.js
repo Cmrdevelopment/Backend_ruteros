@@ -9,11 +9,10 @@ const User = require("../models/user.model");
 const nodemailer = require("nodemailer");
 const { generateToken } = require("../../utils/token");
 const randomPassword = require("../../utils/randomPassword");
-const { UserErrors, UserSuccess } = require("../../helpers/jsonResponseMsgs"); //AAAAA
+const { UserErrors, UserSuccess } = require("../../helpers/jsonResponseMsgs");
 const { setError } = require("../../helpers/handle-error");
 
 const Ratings = require("../models/ratings.model");
-const Offer = require("../models/offer.model");
 const Experience = require("../models/experience.model");
 const Comment = require("../models/comment.model");
 
@@ -26,7 +25,6 @@ const BASE_URL_COMPLETE = `${BASE_URL}${PORT}`;
 //! -----------------------------------------------------------------------------
 const registerSlow = async (req, res, next) => {
   await User.syncIndexes();
-  let catchImg = req.file?.path;
   try {
     let confirmationCode = randomCode();
     const userEmail = req.body.email;
@@ -99,14 +97,12 @@ const registerSlow = async (req, res, next) => {
         return res.status(404).json("failed saving user");
       }
     } else {
-      // if (req.file) deleteImgCloudinary(catchImg);
       if (req.files) {
         req.files.map((image) => deleteImgCloudinary(image.path));
       }
       return res.status(409).json("This user already exist");
     }
   } catch (error) {
-    // if (req.file) deleteImgCloudinary(catchImg);
     if (req.files) {
       req.files.map((image) => deleteImgCloudinary(image.path));
     }
@@ -330,7 +326,7 @@ const changePassword = async (req, res, next) => {
 //! -----------------------------------------------------------------------------
 const update = async (req, res, next) => {
   await User.syncIndexes();
-  let catchImg = req.file?.path;
+  // let catchImg = req.file?.path;
   const { name, surname, description, city, image } = req.body;
   // hacer un update especial para las tecnologias y un controlador para seguir a la gente
 
@@ -356,8 +352,6 @@ const update = async (req, res, next) => {
     patchUser.confirmationCode = req.user.confirmationCode;
     patchUser.emailChange = req.user.emailChange;
     patchUser.habilities = req.user.habilities;
-    patchUser.offersCreated = req.user.offersCreated;
-    patchUser.offersInterested = req.user.offersInterested;
     patchUser.commentsByMe = req.user.commentsByMe;
 
     patchUser.commentsByOthers = req.user.commentsByOthers;
@@ -406,7 +400,7 @@ const update = async (req, res, next) => {
       return res.status(404).json("failed updating user");
     }
   } catch (error) {
-    if (catchImg) deleteImgCloudinary(catchImg);
+    // if (catchImg) deleteImgCloudinary(catchImg);
     return next(error);
   }
 };
@@ -445,7 +439,7 @@ const updateHabilities = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   try {
-    const { _id, image } = req.user;
+    const { _id } = req.user;
     const deleteUser = await User.findByIdAndDelete(_id);
 
     if (deleteUser) {
@@ -465,12 +459,12 @@ const deleteUser = async (req, res, next) => {
           },
         );
 
-        await Offer.updateMany(
-          { users: _id },
-          {
-            $pull: { users: _id },
-          },
-        );
+        // await Offer.updateMany(
+        //   { users: _id },
+        //   {
+        //     $pull: { users: _id },
+        //   },
+        // );
 
         await Experience.updateMany(
           { users: _id },
@@ -564,8 +558,11 @@ const getById = async (req, res, next) => {
 //! ---------------------------------------------------------------------
 const getByToken = async (req, res, next) => {
   try {
+    // const userByToken = await User.findById(req.user._id).populate(
+    //   "habilities offersCreated offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
+    // );
     const userByToken = await User.findById(req.user._id).populate(
-      "habilities offersCreated offersInterested commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
+      "habilities  commentsByMe commentsByOthers ratingsByMe ratingsByOthers experience following followers comentsThatILike",
     );
     if (userByToken) {
       return res.status(200).json(userByToken);

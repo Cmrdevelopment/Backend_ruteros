@@ -21,15 +21,27 @@ const CommentSchema = new mongoose.Schema(
       required: false,
     },
 
+    // referenceMountainRouteComment: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Offer",
+    //   required: false,
+    // },
+
+    // referenceCityRouteComment: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: "Offer",
+    //   required: false,
+    // },
+
     referenceMountainRouteComment: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Offer",
+      ref: "MountainRoute",
       required: false,
     },
 
     referenceCityRouteComment: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Offer",
+      ref: "CityRoute",
       required: false,
     },
 

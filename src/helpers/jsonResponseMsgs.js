@@ -20,11 +20,19 @@ const UserErrors = {
   FAIL_LOGIN_EMAIL: "Wrong email address, please try again",
 };
 
-const OfferErrors = {
-  FAIL_UPDATING_OFFER: "Fail updating offer",
-  FAIL_SEARCHING_OFFER: "Fail searching offers",
-  FAIL_SEARCHING_OFFER_BY_ID: "Fail searching offer by ID",
-  FAIL_SEARCHING_OFFER_BY_NAME: "Fail searching offer by name",
+const CityRouteErrors = {
+  FAIL_UPDATING_CITY_ROUTE: "Fail updating city route",
+  FAIL_SEARCHING_CITY_ROUTE: "Fail searching city route",
+  FAIL_SEARCHING_CITY_ROUTE_BY_ID: "Fail searching city route by ID",
+  FAIL_SEARCHING_CITY_ROUTE_BY_NAME: "Fail searching city route by name",
+};
+
+const MountainRouteErrors = {
+  FAIL_UPDATING_MOUNTAIN_ROUTE: "Fail updating mountain route",
+  FAIL_SEARCHING_MOUNTAIN_ROUTE: "Fail searching mountain route",
+  FAIL_SEARCHING_MOUNTAIN_ROUTE_BY_ID: "Fail searching mountain route by ID",
+  FAIL_SEARCHING_MOUNTAIN_ROUTE_BY_NAME:
+    "Fail searching mountain route by name",
 };
 
 const CommentErrors = {
@@ -72,7 +80,8 @@ const AppSuccess = {
 
 module.exports.UserSuccess = UserSuccess;
 module.exports.UserErrors = UserErrors;
-module.exports.OfferErrors = OfferErrors;
+module.exports.CityRouteErrors = CityRouteErrors;
+module.exports.MountainRouteErrors = MountainRouteErrors;
 module.exports.MobileDevErrors = MobileDevErrors;
 module.exports.MobileDevSuccess = MobileDevSuccess;
 module.exports.AppErrors = AppErrors;

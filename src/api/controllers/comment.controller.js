@@ -1,7 +1,7 @@
 const User = require("../models/user.model");
 const Comment = require("../models/comment.model");
-const MountainRoute = require('../models/mountainRoute.model');
-const CityRoute = require('../models/cityRoutes.model');
+const MountainRoute = require("../models/mountainRoute.model");
+const CityRoute = require("../models/cityRoutes.model");
 const {
   CommentErrors,
   CommentSuccess,

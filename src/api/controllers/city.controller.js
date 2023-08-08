@@ -2,7 +2,7 @@ const User = require("../models/user.model");
 
 const Comment = require("../models/comment.model");
 
-const { OfferErrors } = require("../../helpers/jsonResponseMsgs");
+const { CityRouteErrors } = require("../../helpers/jsonResponseMsgs");
 
 const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 
@@ -42,7 +42,7 @@ const createCity = async (req, res, next) => {
           "https://res.cloudinary.com/dxpdntpqm/image/upload/v1689155185/Imagen_general_base_city_tvs85z.png";
       }
     } catch (error) {
-      return res.status(404).json("Error creating offer");
+      return res.status(404).json("Error creating city route");
     }
 
     try {
@@ -148,16 +148,16 @@ const getCityFollowingStatus = async (req, res, next) => {
     );
 
     if (isCityInCitysInterestedArr === undefined) {
-      // La oferta a seguir no está en el array 'offersInterested',
+      // La oferta a seguir no está en el array 'citiessInterested',
       // reportamos que la oferta no está en el array.
       return res.status(200).json({
         status: "City is Not in user's citysInterested arr",
       });
     } else {
-      // La oferta a seguir está en el array 'offersInterested',
+      // La oferta a seguir está en el array 'citiessInterested',
       // por lo tanto reportamos al front que la
       // oferta en la que está ineresado el user está
-      // en el array offersInterested.
+      // en el array citiesInterested.
       return res.status(200).json({
         status: "City is in user's citysInterested arr",
       });
@@ -182,7 +182,7 @@ const getAll = async (req, res, next) => {
     if (Citys) {
       return res.status(200).json(Citys);
     } else {
-      return res.status(404).json(OfferErrors.FAIL_SEARCHING_OFFER);
+      return res.status(404).json(CityRouteErrors.FAIL_SEARCHING_CITY_ROUTE);
     }
   } catch (error) {
     return next(error);
@@ -203,7 +203,9 @@ const getById = async (req, res, next) => {
     if (cityById) {
       return res.status(200).json(cityById);
     } else {
-      return res.status(404).json(OfferErrors.FAIL_SEARCHING_OFFER_BY_ID);
+      return res
+        .status(404)
+        .json(CityRouteErrors.FAIL_SEARCHING_CITY_ROUTE_BY_ID);
     }
   } catch (error) {
     return next(error);
@@ -223,7 +225,9 @@ const getByCityName = async (req, res, next) => {
     if (CityNameByName) {
       return res.status(200).json(CityNameByName);
     } else {
-      return res.status(404).json(OfferErrors.FAIL_SEARCHING_OFFER_BY_NAME);
+      return res
+        .status(404)
+        .json(CityRouteErrors.FAIL_SEARCHING_CITY_ROUTE_BY_NAME);
     }
   } catch (error) {
     return next(error);
@@ -267,7 +271,7 @@ const updateCity = async (req, res, next) => {
       await CityRoute.findByIdAndUpdate(id, patchCity); // Guardar los cambios en la base de datos
       return res.status(200).json(await CityRoute.findById(id)); // Responder con el objeto actualizado
     } else {
-      return res.status(404).json(OfferErrors.FAIL_UPDATING_OFFER);
+      return res.status(404).json(CityRouteErrors.FAIL_UPDATING_CITY_ROUTE);
     }
   } catch (error) {
     return next(error);

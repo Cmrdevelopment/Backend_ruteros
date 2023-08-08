@@ -375,7 +375,7 @@ const newComment = async (req, res, next) => {
             } catch (error) {
               return res
                 .status(404)
-                .json("error updating referenceOffer model");
+                .json("error updating referenceMountainRoute model");
             }
           } catch (error) {
             return res.status(404).json("error updating owner user comment ");
@@ -393,60 +393,6 @@ const newComment = async (req, res, next) => {
     return next(error);
   }
 };
-
-// //! -----------------------------------------------------------------------------
-// //? ----------------------------- DELETE ----------------------------------------
-// //! -----------------------------------------------------------------------------
-// //?------------------------------------------------------------------------------
-// //!--------INCOMPLETO--INCOMPLETO--INCOMPLETO--INCOMPLETO--INCOMPLETO------------
-// //?------------------------------------------------------------------------------
-// //!-Revisar en el excalidraw las funcionalidades adicionales que este delete debe tener
-// //?------------------------------------------------------------------------------------
-
-// const deleteUser = async (req, res, next) => {
-//   try {
-//     const { _id, image } = req.user;
-//     await User.findByIdAndDelete(_id);
-//     if (await User.findById(_id)) {
-//       return res.status(404).json(UserErrors.FAIL_DELETING_USER);
-//     } else {
-//       deleteImgCloudinary(image);
-
-//       await Ratings.updateMany(
-//         { users: _id },
-//         {
-//           $pull: { users: _id },
-//         }
-//       );
-
-//       await Offer.updateMany(
-//         { users: _id },
-//         {
-//           $pull: { users: _id },
-//         }
-//       );
-
-//       await Experience.updateMany(
-//         { users: _id },
-//         {
-//           $pull: { users: _id },
-//         }
-//       );
-
-//       await Comment.updateMany(
-//         { users: _id },
-//         {
-//           $pull: { users: _id },
-//         }
-//       );
-
-//       return res.status(200).json(UserSuccess.SUCCESS_DELETING_USER);
-//     }
-//   } catch (error) {
-//     deleteImgCloudinary(req.user.image);
-//     return next(error);
-//   }
-// };
 
 module.exports = {
   createChat,

@@ -1,6 +1,6 @@
 const MountainRoute = require("../models/mountainRoute.model");
 const User = require("../models/user.model");
-const { OfferErrors } = require("../../helpers/jsonResponseMsgs");
+const { CityRouteErrors } = require("../../helpers/jsonResponseMsgs");
 const { deleteImgCloudinary } = require("../../middleware/files.middleware");
 
 //! -----------------------------------------------------------------------
@@ -181,7 +181,7 @@ const getAllMountainRoutes = async (req, res, next) => {
     if (MountainRoutes) {
       return res.status(200).json(MountainRoutes);
     } else {
-      return res.status(404).json(OfferErrors.FAIL_SEARCHING_OFFER);
+      return res.status(404).json(CityRouteErrors.FAIL_SEARCHING_CITY_ROUTE);
     }
   } catch (error) {
     return next(error);
@@ -202,7 +202,9 @@ const getMountainRouteById = async (req, res, next) => {
     if (routeById) {
       return res.status(200).json(routeById);
     } else {
-      return res.status(404).json(OfferErrors.FAIL_SEARCHING_OFFER_BY_ID);
+      return res
+        .status(404)
+        .json(CityRouteErrors.FAIL_SEARCHING_CITY_ROUTE_BY_ID);
     }
   } catch (error) {
     return next(error);
@@ -215,13 +217,13 @@ const getMountainRouteById = async (req, res, next) => {
 //Revisar filterbody. Pregunta a quien revise esto: ¿Se puede meter por filterbody un valor cuyo required sea 'true'? ¿O dará problemas? En caso de problemas, revisar esto.
 const updateMountainRoute = async (req, res, next) => {
   try {
-    let newImage = "";
+    // let newImage = "";
 
-    if (req.file) {
-      newImage = req.file.path;
-    } else {
-      newImage = "https://pic.onlinewebfonts.com/svg/img_181369.png";
-    }
+    // if (req.file) {
+    //   newImage = req.file.path;
+    // } else {
+    //   newImage = "https://pic.onlinewebfonts.com/svg/img_181369.png";
+    // }
 
     const mountainRouteBody = {
       routeName: req.body.routeName,
@@ -245,7 +247,7 @@ const updateMountainRoute = async (req, res, next) => {
       await MountainRoute.findByIdAndUpdate(id, patchRoute); // Guardar los cambios en la base de datos
       return res.status(200).json(await MountainRoute.findById(id)); // Responder con el objeto actualizado
     } else {
-      return res.status(404).json(OfferErrors.FAIL_UPDATING_OFFER);
+      return res.status(404).json(CityRouteErrors.FAIL_UPDATING_CITY_ROUTE);
     }
   } catch (error) {
     return next(error);
