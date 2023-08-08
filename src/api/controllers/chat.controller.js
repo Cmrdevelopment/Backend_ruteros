@@ -3,9 +3,9 @@ const User = require("../models/user.model");
 //const { setError } = require("../../helpers/handle-error");
 
 //const Ratings = require("../models/ratings.model");
-const CityRoute = require ('../models/cityRoutes.model');
-const MountainRoute = require('../models/mountainRoute.model')
-const Offer = require("../models/offer.model");
+const CityRoute = require("../models/cityRoutes.model");
+const MountainRoute = require("../models/mountainRoute.model");
+
 //const Experience = require("../models/experience.model");
 const Comment = require("../models/comment.model");
 const Chat = require("../models/chat.model");
@@ -16,7 +16,6 @@ const Chat = require("../models/chat.model");
 //! -----------------------------------------------------------------------------
 const createChat = async (req, res, next) => {
   try {
-    
     const { userOne, userTwo } = req.body;
 
     const chatExistOne = await User.findOne({ userOne, userTwo });
@@ -95,41 +94,41 @@ const newComment = async (req, res, next) => {
             });
             try {
               if (req.body.referenceMountainRouteComment) {
-                
-                await MountainRoute.findByIdAndUpdate(req.body.referenceMountainRouteComment, {
-                  $push: { comments: newComment._id },
-                });
+                await MountainRoute.findByIdAndUpdate(
+                  req.body.referenceMountainRouteComment,
+                  {
+                    $push: { comments: newComment._id },
+                  },
+                );
                 try {
                   const userReal = await MountainRoute.findById(
                     req.body.referenceMountainRouteComment,
                   ).populate("owner");
-                  await User.findByIdAndUpdate(userReal.owner._id, { /*userReal.owner[0]._id,*/
+                  await User.findByIdAndUpdate(userReal.owner._id, {
+                    /*userReal.owner[0]._id,*/
                     $push: { commentsByOthers: newComment._id },
                   });
 
                   const userOne = req.user._id;
                   const userTwo = req.body.referenceUser
                     ? req.body.referenceUser
-                    : userReal.owner._id;  /*userReal.owner[0]._id;*/
+                    : userReal.owner._id; /*userReal.owner[0]._id;*/
 
                   const chatExistOne = await Chat.findOne({
                     userOne: req.user._id,
                     userTwo: req.body.referenceUser
                       ? req.body.referenceUser
-                      : userReal.owner._id,  /*userReal.owner[0]._id,*/
+                      : userReal.owner._id /*userReal.owner[0]._id,*/,
                   });
-                  
+
                   const chatExistTwo = await Chat.findOne({
                     userTwo: req.user._id,
                     userOne: req.body.referenceUser
                       ? req.body.referenceUser
-                      : userReal.owner._id, /*userReal.owner[0]._id,*/
+                      : userReal.owner._id /*userReal.owner[0]._id,*/,
                   });
 
-                  
-
                   if (!chatExistOne && !chatExistTwo) {
-                    
                     const newChat = new Chat({ userOne, userTwo });
                     newChat.menssages = [newComment._id];
                     try {
@@ -162,11 +161,9 @@ const newComment = async (req, res, next) => {
                         }
                       }
                     } catch (error) {
-                     
                       return res.status(404).json(error.message);
                     }
                   } else {
-                    
                     try {
                       await Chat.findByIdAndUpdate(
                         chatExistOne ? chatExistOne._id : chatExistTwo._id,
@@ -187,41 +184,41 @@ const newComment = async (req, res, next) => {
                   return next(error);
                 }
               } else if (req.body.referenceCityRouteComment) {
-                
-                await CityRoute.findByIdAndUpdate(req.body.referenceCityRouteComment, {
-                  $push: { comments: newComment._id },
-                });
+                await CityRoute.findByIdAndUpdate(
+                  req.body.referenceCityRouteComment,
+                  {
+                    $push: { comments: newComment._id },
+                  },
+                );
                 try {
                   const userReal = await CityRoute.findById(
                     req.body.referenceCityRouteComment,
                   ).populate("owner");
-                  await User.findByIdAndUpdate(userReal.owner._id, { /*userReal.owner[0]._id,*/
+                  await User.findByIdAndUpdate(userReal.owner._id, {
+                    /*userReal.owner[0]._id,*/
                     $push: { commentsByOthers: newComment._id },
                   });
 
                   const userOne = req.user._id;
                   const userTwo = req.body.referenceUser
                     ? req.body.referenceUser
-                    : userReal.owner._id;  /*userReal.owner[0]._id;*/
+                    : userReal.owner._id; /*userReal.owner[0]._id;*/
 
                   const chatExistOne = await Chat.findOne({
                     userOne: req.user._id,
                     userTwo: req.body.referenceUser
                       ? req.body.referenceUser
-                      : userReal.owner._id,  /*userReal.owner[0]._id,*/
+                      : userReal.owner._id /*userReal.owner[0]._id,*/,
                   });
-                  
+
                   const chatExistTwo = await Chat.findOne({
                     userTwo: req.user._id,
                     userOne: req.body.referenceUser
                       ? req.body.referenceUser
-                      : userReal.owner._id, /*userReal.owner[0]._id,*/
+                      : userReal.owner._id /*userReal.owner[0]._id,*/,
                   });
 
-                  
-
                   if (!chatExistOne && !chatExistTwo) {
-                   
                     const newChat = new Chat({ userOne, userTwo });
                     newChat.menssages = [newComment._id];
                     try {
@@ -254,11 +251,9 @@ const newComment = async (req, res, next) => {
                         }
                       }
                     } catch (error) {
-                      
                       return res.status(404).json(error.message);
                     }
                   } else {
-                    
                     try {
                       await Chat.findByIdAndUpdate(
                         chatExistOne ? chatExistOne._id : chatExistTwo._id,
@@ -278,7 +273,7 @@ const newComment = async (req, res, next) => {
                 } catch (error) {
                   return next(error);
                 }
-              }else {
+              } else {
                 try {
                   if (req.body.referenceUser) {
                     await User.findByIdAndUpdate(req.body.referenceUser, {
@@ -342,7 +337,6 @@ const newComment = async (req, res, next) => {
                         }
                       } else {
                         try {
-                         
                           await Chat.findByIdAndUpdate(
                             chatExistOne ? chatExistOne._id : chatExistTwo._id,
                             { $push: { menssages: newComment.id } },

@@ -21,7 +21,6 @@ const PORT = process.env.PORT;
 const BASE_URL = process.env.BASE_URL;
 const BASE_URL_COMPLETE = `${BASE_URL}${PORT}`;
 
-
 //! -----------------------------------------------------------------------------
 //? ----------------------------REGISTER LARGO EN CODIGO ------------------------
 //! -----------------------------------------------------------------------------
@@ -393,11 +392,11 @@ const update = async (req, res, next) => {
       if (req.file) {
         updateUser.image == req.file.path
           ? testUpdate.push({
-            file: true,
-          })
+              file: true,
+            })
           : testUpdate.push({
-            file: false,
-          });
+              file: false,
+            });
       }
 
       return res.status(200).json({
@@ -652,7 +651,6 @@ const changeEmail = async (req, res, next) => {
   }
 };
 const sendNewCode = async (req, res, next) => {
-
   try {
     const { id } = req.params;
     const userDB = await User.findById(id);

@@ -30,7 +30,6 @@ const createOffer = async (req, res, next) => {
 
     const newOffer = new Offer(offerBody);
 
-    
     // try {
     //   if (req.file) {
     //     newOffer.image = req.file.path;

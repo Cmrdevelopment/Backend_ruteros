@@ -59,7 +59,6 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
 
-
     // Habilities for Routers (Ruteros), like camping, orienting, ...
     habilities: {
       type: [String],

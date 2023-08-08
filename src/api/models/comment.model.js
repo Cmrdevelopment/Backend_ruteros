@@ -26,7 +26,7 @@ const CommentSchema = new mongoose.Schema(
       ref: "Offer",
       required: false,
     },
-    
+
     referenceCityRouteComment: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Offer",

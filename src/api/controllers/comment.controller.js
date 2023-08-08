@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const Comment = require("../models/comment.model");
-const Offer = require("../models/offer.model");
+const MountainRoute = require('../models/mountainRoute.model');
+const CityRoute = require('../models/cityRoutes.model');
 const {
   CommentErrors,
   CommentSuccess,
@@ -24,7 +25,7 @@ const createComment = async (req, res, next) => {
     const newComment = new Comment(commentBody);
     try {
       const savedComment = await newComment.save();
-      
+
       if (savedComment) {
         try {
           await User.findByIdAndUpdate(req.user._id, {
@@ -32,12 +33,13 @@ const createComment = async (req, res, next) => {
           });
           try {
             if (req.body.referenceMountainRouteComment) {
-              await MountainRoute.findByIdAndUpdate(req.body.referenceMountainRouteComment, {
-                $push: { comments: newComment._id },
-            
-              });
+              await MountainRoute.findByIdAndUpdate(
+                req.body.referenceMountainRouteComment,
+                {
+                  $push: { comments: newComment._id },
+                },
+              );
               return res.status(200).json(savedComment);
-            
             } else {
               try {
                 if (req.body.referenceUser) {
@@ -48,9 +50,12 @@ const createComment = async (req, res, next) => {
                 } else {
                   try {
                     if (req.body.referenceCityRouteComment) {
-                      await CityRoute.findByIdAndUpdate(req.body.referenceCityRouteComment, {
-                        $push: { comments: newComment._id },
-                      });
+                      await CityRoute.findByIdAndUpdate(
+                        req.body.referenceCityRouteComment,
+                        {
+                          $push: { comments: newComment._id },
+                        },
+                      );
                       return res.status(200).json(savedComment);
                     }
                   } catch (error) {
@@ -58,7 +63,7 @@ const createComment = async (req, res, next) => {
                       .status(404)
                       .json("error updating user referenceCityRoute");
                   }
-                } 
+                }
               } catch (error) {
                 return res
                   .status(404)
@@ -66,7 +71,9 @@ const createComment = async (req, res, next) => {
               }
             }
           } catch (error) {
-            return res.status(404).json("error updating referenceMountainRoute model");
+            return res
+              .status(404)
+              .json("error updating referenceMountainRoute model");
           }
         } catch (error) {
           return res.status(404).json("error updating owner user comment ");
@@ -148,7 +155,6 @@ const toggleFavorite = async (req, res, next) => {
     const userId = req.user._id;
     //userIdPageDetail es el propietario del comentario
     const userIdPageDetail = req.body.userIdPageDetail;
-   
 
     const commentFav = await Comment.findById(commentId);
     const user = await User.findById(userId);
@@ -213,14 +219,15 @@ const getByReference = async (req, res, next) => {
         .sort({ createdAt: -1 })
         .populate("owner");
       return res.status(200).json(comments);
-    } else if(refType === "CityRoute") {
-        comments = await Comment.find({ referenceCityRouteComment: id })
-          .sort({ createdAt: -1 })
-          .populate("owner referenceCityRouteComment");
-        return res.status(200).json(comments);
-     } else {
+    } else if (refType === "CityRoute") {
+      comments = await Comment.find({ referenceCityRouteComment: id })
+        .sort({ createdAt: -1 })
+        .populate("owner referenceCityRouteComment");
+      return res.status(200).json(comments);
+    } else {
       return res.status(404).json({
-        error: "Invalid reference type. It must be either 'User' or 'CityRoute' or 'MountainRoute'.",
+        error:
+          "Invalid reference type. It must be either 'User' or 'CityRoute' or 'MountainRoute'.",
       });
     }
   } catch (error) {

@@ -16,7 +16,7 @@ const CityRouteSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Nombre de la ruta 
+    // Nombre de la ruta
     routeName: {
       type: String,
       required: true,
